@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from django.views.generic.simple import direct_to_template
+
 def render_to(template):
     """
     @note: based on http://www.djangosnippets.org/snippets/821/
@@ -25,11 +27,11 @@ def render_to(template):
         def wrapper(request, *args, **kw):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
-                return render_to_response('/'.join(('pythonica', output[1],)),
-                    output[0], RequestContext(request))
+                return direct_to_template(request,
+                    '/'.join(('pythonica', output[1],)), output[0])
             elif isinstance(output, dict):
-                return render_to_response('/'.join(('pythonica', template,)),
-                    output, RequestContext(request))
+                return direct_to_template(request,
+                    '/'.join(('pythonica', template,)), output)
             return output
         return wrapper
     return renderer

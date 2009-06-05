@@ -43,6 +43,7 @@ class Tag(models.Model):
         verbose_name_plural = _('tags')
         ordering = ['name',]
 
+
 class Group(models.Model):
     """
     @note: group 
@@ -69,18 +70,47 @@ class Group(models.Model):
         ordering = ['name',]
 
 
+class Input(models.Model):
+    """
+    @note: input source for notices
+    """
+    
+    name = models.CharField(_('input name'), max_length=140)
+    url = models.URLField(_('input url'), blank=True, null=True)
+    """ @todo: automate input notices counter """
+    # notices_count = models.PositiveIntegerField(_('input notices count'), default=0)
+    
+    def __unicode__(self):
+        return u'%s' % self.name
+    
+    def get_absolute_url(self):
+        return url
+    
+    class Meta():
+        verbose_name = _('input')
+        verbose_name_plural = _('inputs')
+        ordering = ['name',]
+
+
 class Notice(models.Model):
     """
     @note: Notice itself 
     """
     
-    posted = models.DateTimeField(_('notice posted at'), auto_now_add=True)
-    author = models.ForeignKey(User, verbose_name=_('notice author'))
+    posted = models.DateTimeField(_('notice posted at'), auto_now_add=True,
+        editable=False)
+    author = models.ForeignKey(User, verbose_name=_('notice author'),
+        editable=False)
     text = models.CharField(_('notice text'), max_length=140)
+    via = models.ForeignKey(Input, verbose_name=_('notice sent via'),
+        editable=False)
     in_reply_to = models.ManyToManyField('self', symmetrical=False,
-        related_name='replies', verbose_name=_('notice is in reply to'))
-    tags = models.ManyToManyField(Tag, verbose_name=_('notice tags'))
-    groups = models.ManyToManyField(Group, verbose_name=_('notice groups'))
+        related_name='replies', verbose_name=_('notice is in reply to'),
+        null=True, editable=False)
+    tags = models.ManyToManyField(Tag, verbose_name=_('notice tags'),
+        null=True, editable=False)
+    groups = models.ManyToManyField(Group, verbose_name=_('notice groups'),
+        null=True, editable=False)
     
     def __unicode__(self):
         return u'(%s) %s: %s' % (self.id, self.posted, self.text)

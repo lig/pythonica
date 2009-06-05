@@ -1,0 +1,7 @@
+<div class="notice">
+<div class="notice author">{% with notice.author as user %}{% include 'pythonica/inc/user_link.html' %}{% endwith %}</div>
+<div class="notice text">{{ notice.text }}</div>
+<div class="notice posted">{{ notice.posted|timesince }}</div>
+<div class="notice input">{{ notice.input }}</div>
+<div class="notice reply">{{ notice.in_reply_to }}</div>
+</div>

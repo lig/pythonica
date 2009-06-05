@@ -1,5 +1,4 @@
-{% extends 'base.html' %}
-{% comment %}
+"""
 Copyright 2009 Serge Matveenko
 
 This file is part of Pythonica.
@@ -16,7 +15,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
-{% endcomment %}
+"""
 
-{% block content %}
-{% endblock %}
+import os
+
+from django.conf.urls.defaults import *
+
+patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
+    'views',))
+
+urlpatterns = patterns(patterns_prefix,
+    (r'^$', 'index', {}, 'pythonica-index'),
+)
