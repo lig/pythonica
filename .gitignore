@@ -1,0 +1,5 @@
+.*
+*.pyc
+/django
+/settings/local.py
+/local.db
