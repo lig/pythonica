@@ -26,7 +26,6 @@ class Tag(models.Model):
     """
     @note: tags for notices, groups, users  
     """
-    objects = models.Manager()
     
     name = models.CharField(_('tag name'), max_length=140)
     """ @todo: automate tag use counter """
@@ -48,7 +47,6 @@ class Group(models.Model):
     """
     @note: group 
     """
-    objects = models.Manager()
     
     name = models.CharField(_('group name'), max_length=140)
     tags = models.ManyToManyField(Tag, verbose_name=_('group tags'))
@@ -75,7 +73,6 @@ class Notice(models.Model):
     """
     @note: Notice itself 
     """
-    objects = models.Manager()
     
     posted = models.DateTimeField(_('notice posted at'), auto_now_add=True)
     author = models.ForeignKey(User, verbose_name=_('notice author'))
