@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="u">
+
+<head>
+
+<title>{% block title %}{{ site.name }}{% endblock %}</title>
+
+<link rel="icon" type="image/png" href="/media/images/favicon.png" />
+
+{% block css %}
+<link rel="stylesheet" href="/media/css/default.css" type="text/css" />
+{% endblock %}
+
+{% block rss %}
+{% endblock rss %}
+
+</head>
+
+<body>
+
+<div id="main">
+
+{% block header %}
+<div id="header">
+{% include 'header.html' %}
+</div>
+{% endblock header %}
+
+{% block messages %}
+<div id="messages">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content">
+</div>
+{% endblock %}
+
+{% block footer %}
+<div id="footer">
+{% include 'footer.html' %}
+</div>
+{% endblock footer %}
+
+</div>
+
+{% block debug %}
+<div id="debug">
+{% if debug %}
+<br clear="both" />
+<hr/>
+<p>
+{% for sql_query in sql_queries %}
+{{ forloop.counter }}. {{ sql_query.sql }} in {{ sql_query.time }}<br />
+{% endfor %}
+</p>
+{% endif %}
+</div>
+{% endblock %}
+</body>
+
+</html>
