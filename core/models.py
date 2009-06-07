@@ -21,18 +21,19 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from managers import NoticeManager
+from utils import get_tags_groups_users
 
 class Tag(models.Model):
     """
     @note: tags for notices, groups, users  
     """
     
-    name = models.CharField(_('tag name'), max_length=140)
-    """ @todo: automate tag use counter """
-    # use_count = models.PositiveIntegerField(_('tag use count'), default=0)
+    name = models.CharField(_('tag name'), max_length=140, unique=True)
+    use_count = models.PositiveIntegerField(_('tag use count'), default=0)
     
     def __unicode__(self):
-        return u'%s' % self.name
+        return u'%s (%s)' % (self.name, self.use_count)
     
     @models.permalink
     def get_absolute_url(self):
@@ -41,7 +42,7 @@ class Tag(models.Model):
     class Meta():
         verbose_name = _('tag')
         verbose_name_plural = _('tags')
-        ordering = ['name',]
+        ordering = ['-use_count',]
 
 
 class Group(models.Model):
@@ -49,9 +50,11 @@ class Group(models.Model):
     @note: group 
     """
     
-    name = models.CharField(_('group name'), max_length=140)
-    tags = models.ManyToManyField(Tag, verbose_name=_('group tags'))
-    users = models.ManyToManyField(User, verbose_name=_('group users'))
+    name = models.CharField(_('group name'), max_length=140, unique=True)
+    tags = models.ManyToManyField(Tag, verbose_name=_('group tags'),
+        blank=True)
+    users = models.ManyToManyField(User, verbose_name=_('group users'),
+        blank=True)
     is_closed = models.BooleanField(_('is group closed'), default=False)
     """ @todo: automate group users and notices counters """
     # users_count = models.PositiveIntegerField(_('group users count'), default=0)
@@ -65,8 +68,8 @@ class Group(models.Model):
         return ('group', [self.name,])
     
     class Meta():
-        verbose_name = _('name')
-        verbose_name_plural = _('names')
+        verbose_name = _('group')
+        verbose_name_plural = _('groups')
         ordering = ['name',]
 
 
@@ -96,21 +99,55 @@ class Notice(models.Model):
     """
     @note: Notice itself 
     """
+    objects = NoticeManager()
     
-    posted = models.DateTimeField(_('notice posted at'), auto_now_add=True,
-        editable=False)
-    author = models.ForeignKey(User, verbose_name=_('notice author'),
-        editable=False)
+    posted = models.DateTimeField(_('notice posted at'), auto_now_add=True)
+    author = models.ForeignKey(User, verbose_name=_('notice author'))
     text = models.CharField(_('notice text'), max_length=140)
-    via = models.ForeignKey(Input, verbose_name=_('notice sent via'),
-        editable=False)
+    via = models.ForeignKey(Input, verbose_name=_('notice sent via'))
     in_reply_to = models.ManyToManyField('self', symmetrical=False,
         related_name='replies', verbose_name=_('notice is in reply to'),
-        null=True, editable=False)
+        null=True)
     tags = models.ManyToManyField(Tag, verbose_name=_('notice tags'),
-        null=True, editable=False)
+        null=True)
     groups = models.ManyToManyField(Group, verbose_name=_('notice groups'),
-        null=True, editable=False)
+        null=True)
+    is_restricted = models.BooleanField(_('is notice restricted'),
+        default=False)
+    
+    def save(self, *args, **kwargs):
+        
+        """ save self to take id """
+        super(Notice, self).save(*args, **kwargs)
+        
+        """ unpack tags, groups and users from notice text """
+        tags, groups, users = get_tags_groups_users(self.text)
+        
+        """ process tags """
+        self.tags = Tag.objects.filter(name__in=tags)
+        for tag in tags:
+            if tag not in map(lambda t: t.name, self.tags.all()):
+                self.tags.create(name=tag)
+        self.tags.update(use_count=models.F('use_count')+1)
+        
+        """ process groups """
+        self.groups = Group.objects.filter(name__in=groups)
+        if self.groups.filter(is_closed=True).count() > 0:
+            self.is_restricted = True
+        
+        """ process users
+            @todo: find better way """
+        user_info_list = UserInfo.objects.filter(user__username__in=users)
+        self.in_reply_to = (user_info.last for user_info in user_info_list)
+        
+        """ mark this notice last for author """
+        self.author.info.last = self
+        self.author.info.save()
+        
+        """ save self again and
+            @todo: send signal to notifier """
+        super(Notice, self).save()
+        
     
     def __unicode__(self):
         return u'(%s) %s: %s' % (self.id, self.posted, self.text)
@@ -123,3 +160,46 @@ class Notice(models.Model):
         verbose_name = _('notice')
         verbose_name_plural = _('notices')
         ordering = ['-posted',]
+
+class Follow(models.Model):
+    """
+    @note: follow relationships
+    """
+    
+    follower = models.ForeignKey(User, related_name='followeds',
+        verbose_name=_('user that follows'))
+    followed = models.ForeignKey(User, related_name='followers',
+        verbose_name=_('user that is followed'))
+    
+    def __unicode__(self):
+        return u'%s follows %s' % (self.follower, self.followed)
+        
+    class Meta():
+        unique_together = ('follower', 'followed',)
+        verbose_name = _('follow')
+        verbose_name_plural = _('follows')
+        ordering = ['follower', 'followed',]
+
+class UserInfo(models.Model):
+    """
+    @note: pythonica specific user info (we don't want to use django profile
+        feature)
+    @todo: automate user info creation
+    """
+    
+    user = models.OneToOneField(User, related_name='info',
+        verbose_name=_('user'))
+    last = models.ForeignKey(Notice, null=True, blank=True,
+        verbose_name=_('user last notice'))
+    
+    def __unicode__(self):
+        return u'%s' % self.user
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return ('pythonica-profile', [self.user.username,])
+    
+    class Meta():
+        verbose_name = _('user info')
+        verbose_name_plural = _('user info')
+        ordering = ['user',]

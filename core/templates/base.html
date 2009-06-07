@@ -39,12 +39,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 <div id="main">
 
-{% block header %}
-<div id="header">
-{% include 'pythonica/header.html' %}
-</div>
-{% endblock header %}
-
 {% block messages %}
 <div id="messages">
     {% if messages %}
@@ -57,15 +51,16 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 </div>
 {% endblock %}
 
+{% block header %}
+<h1>{{ site.name }}</h1>
+{% endblock header %}
+
 {% block content %}
 <div id="content">
 </div>
-{% endblock %}
+{% endblock content %}
 
 {% block footer %}
-<div id="footer">
-{% include 'pythonica/footer.html' %}
-</div>
 {% endblock footer %}
 
 </div>

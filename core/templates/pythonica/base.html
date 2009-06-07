@@ -1,4 +1,5 @@
-"""
+{% extends 'base.html' %}
+{% comment %}
 Copyright 2009 Serge Matveenko
 
 This file is part of Pythonica.
@@ -15,19 +16,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
-"""
+{% endcomment %}
 
-import os
+{% block content %}
 
-from django.conf import settings
-from django.conf.urls.defaults import *
+{% include 'pythonica/inc/notice_form.html' %}
 
-patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
-    'views',))
+{% block pythonica %}
+{% endblock pythonica %}
 
-urlpatterns = patterns(patterns_prefix,
-    (r'^$', 'index', {}, 'pythonica-index'),
-    (r'^post/$', 'post', {}, 'pythonica-post'),
-    (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
-        'pythonica-all'),
-)
+<p><em>Powered by <a href="http://pythonica.nophp.ru/">Pythonica</a></em></p>
+
+{% endblock content %}

@@ -17,17 +17,9 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import os
+from django.db import models
 
-from django.conf import settings
-from django.conf.urls.defaults import *
-
-patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
-    'views',))
-
-urlpatterns = patterns(patterns_prefix,
-    (r'^$', 'index', {}, 'pythonica-index'),
-    (r'^post/$', 'post', {}, 'pythonica-post'),
-    (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
-        'pythonica-all'),
-)
+class NoticeManager(models.Manager):
+    
+    def public(self):
+        return self.get_query_set().filter(is_restricted=False)

@@ -1,7 +1,28 @@
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+<hr />
 <div class="notice">
 <div class="notice author">{% with notice.author as user %}{% include 'pythonica/inc/user_link.html' %}{% endwith %}</div>
 <div class="notice text">{{ notice.text }}</div>
 <div class="notice posted">{{ notice.posted|timesince }}</div>
 <div class="notice input">{{ notice.input }}</div>
-<div class="notice reply">{{ notice.in_reply_to }}</div>
+<div class="notice reply">{{ notice.in_reply_to.all }}</div>
 </div>
+<hr />

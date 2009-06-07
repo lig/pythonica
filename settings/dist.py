@@ -19,7 +19,8 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 
-PROJECT_ROOT = os.path.pardir
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),
+    os.path.pardir))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -105,6 +106,20 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.admin',
     # pythonica
     'core'
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    # django
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    # pythonica
+    'core.context_processors.pythonica_context',
+)
+
+HASHTAG_REGEX = r'[a-zA-Z0-9_\.\-]+'
+USERNAME_REGEX = r'\w+'

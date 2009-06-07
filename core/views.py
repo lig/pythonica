@@ -17,10 +17,67 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import Http404
+from django.db.models import Q
+from django.shortcuts import redirect
+from django.utils.translation import ugettext as _
+
+from forms import NoticeForm
 from models import Notice
 from utils import render_to
 
+
 @render_to('index.html')
 def index(request):
-    last_notices = Notice.objects.all()[:10]
+    last_notices = Notice.objects.public()[:10]
     return {'last_notices': last_notices,}
+
+@login_required
+@render_to('post.html')
+def post(request):
+    
+    if request.method == 'POST':
+        noticeForm = NoticeForm(request.POST)
+        
+        if noticeForm.is_valid():
+            notice = noticeForm.save(commit=False)
+            notice.author = request.user
+            """ 1 for web """
+            notice.via_id = 1
+            notice.save()
+            request.user.message_set.create(message=_('Your notice added'))
+            return redirect('pythonica-all', username=notice.author)
+    
+    else:
+        noticeForm = NoticeForm()
+    
+    return {'notice_form': noticeForm,}
+
+@login_required
+@render_to('all.html')
+def list_all(request, username):
+    """
+    we gonna show here: own notices, notices of the followed users, replies,
+    notices to groups user in
+    and we must show restricted notices (notices to closed groups) to these
+    groups members only
+    """ 
+    
+    try:
+        list_owner = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404
+    
+    q_public = Q(is_restricted=False)
+    q_own = Q(author=list_owner)
+    q_followed = Q(author__followeds__follower=list_owner)
+    q_replies = Q(in_reply_to__author=list_owner)
+    q_from_groups = Q(groups__users=list_owner)
+    
+    notices = Notice.objects.filter(
+        Q((q_own | q_followed | q_replies), q_public) |
+        q_from_groups)
+    
+    return {'list_owner': list_owner, 'notices': notices,}

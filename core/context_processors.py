@@ -17,17 +17,15 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import os
+from django.contrib.sites.models import Site
 
-from django.conf import settings
-from django.conf.urls.defaults import *
+from forms import NoticeForm
 
-patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
-    'views',))
-
-urlpatterns = patterns(patterns_prefix,
-    (r'^$', 'index', {}, 'pythonica-index'),
-    (r'^post/$', 'post', {}, 'pythonica-post'),
-    (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
-        'pythonica-all'),
-)
+def pythonica_context(request):
+    
+    noticeForm = NoticeForm()
+    
+    return {
+        'site': Site.objects.get_current(),
+        'notice_form': noticeForm,
+    }
