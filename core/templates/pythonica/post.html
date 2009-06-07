@@ -19,5 +19,5 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
 
 {% block pythonica %}
-<strong class="error">{% trans 'Fix errors in the form bellow.' %}</strong>
+<div class="error">{{ notice_form.errors }}</div>
 {% endblock pythonica %}

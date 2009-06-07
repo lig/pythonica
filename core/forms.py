@@ -25,7 +25,8 @@ from models import Notice
 class NoticeForm(forms.ModelForm):
     
     text = forms.CharField(label=_('Whazup?'), widget=forms.Textarea)
-     
+    """ @todo: handle in_reply_to """
+    
     class Meta:
         model = Notice
         fields = ['text',]

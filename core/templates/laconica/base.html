@@ -1,0 +1,148 @@
+{% extends 'base.html' %}{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ media_url }}css/laconica.css" type="text/css" />
+{% endblock %}
+
+{% block body %}
+
+  <div id="wrap">
+   <div id="header">
+    <address id="site_contact" class="vcard">
+     <a class="url home bookmark" href="{% url pythonica-index %}">
+      {# @todo: we need logo #}
+      <img class="logo photo" src="{{ media_url }}images/logo.png" alt="{{ site.name }}"/>
+      <span class="fn org">{{ site.name }}</span>
+</a>
+
+</address>
+    <dl id="site_nav_global_primary">
+     <dt>{% trans 'Primary site navigation' %}</dt>
+     <dd>
+      <ul class="nav">
+{% if user.is_authenticated %}
+       <li id="nav_home">
+        <a href="{% url pythonica-all user.username %}" title="{% trans 'Personal profile and friends timeline' %}">{% trans 'My' %}</a>
+</li>
+       <li id="nav_account">
+
+        <a href="% url pythonica-settings-profile %" title="{% trans 'Change your email, avatar, password, profile' %}">{% trans 'Account' %}</a>
+</li>
+       <li id="nav_connect">
+        <a href="% url pythonica-settings-im %" title="{% trans 'Connect to IM, SMS, Twitter' %}">{% trans 'Connect' %}</a>
+
+</li>
+       <li id="nav_invitecontact">
+        <a href="% url pythonica-invite %" title="{% trans 'Invite friends and colleagues to join you on Identi.ca' %}">{% trans 'Invite' %}</a>
+</li>
+       <li id="nav_logout">
+        <a href="% url logout %" title="{% trans 'Logout from the site' %}">{% trans 'Logout' %}</a>
+</li>
+{% else %}
+       <li id="nav_register">
+        <a href="% url register %" title="{% trans 'Create an account' %}">{% trans 'Register' %}</a>
+</li>
+       <li id="nav_openid">
+        <a href="% url openid %" title="{% trans 'Login with OpenID' %}">{% trans 'OpenID' %}</a>
+</li>
+       <li id="nav_login">
+
+        <a href="% url login %" title="{% trans 'Login to the site' %}">Login</a>
+</li>
+{% endif %}
+       <li id="nav_help">
+        <a href="% url pythonica-page 'help' %" title="{% trans 'Help me!' %}">{% trans 'Help' %}</a>
+</li>
+       <li id="nav_search">
+        <a href="% url pythonica-search %" title="{% trans 'Search for people or text' %}">{% trans 'Search' %}</a>
+</li>
+</ul>
+
+</dd>
+</dl>
+    <dl id="site_notice" class="system_notice">
+     <dt>{% trans 'Site notice' %}</dt>
+     <dd>
+        <ul>
+            {# @todo: system notice admin <li><a href=""></a></li> #}
+        </ul>
+     </dd>
+</dl>
+    <form id="form_notice" class="form" method="post" action="{% pythonica-post %}">
+     <fieldset>
+
+      <legend>{% trans 'Send a notice' %}</legend>
+      {{ notice_form.label }}
+      {{ notice_form.text }}
+      <dl class="form_note">
+       <dt>{% trans 'Available characters' %}</dt>
+       <dd id="notice_text-count">140</dd>
+
+</dl>
+      <input name="inreplyto" type="hidden" id="notice_in-reply-to" value=""/>
+      <input id="notice_action-submit" class="submit" name="status_submit" type="submit" value="ОК"/>
+</fieldset>
+</form>
+</div>
+   <div id="core">
+    <dl id="site_nav_local_views">
+     <dt>{% trans 'Local views' %}</dt>
+     <dd>
+
+      <ul class="nav">
+       <li id="nav_timeline_public">
+        <a href="{% url pythonica-index %}" title="{% trans 'Public timeline' %}">{% trans 'Public' %}</a>
+</li>
+       <li id="nav_groups">
+        <a href="% url pythonica-groups %" title="{% trans 'User groups' %}">{% trans 'Groups' %}</a>
+</li>
+       <li id="nav_recent-tags">
+        <a href="% url pythonica-tags %" title="{% trans 'Recent tags' %}">{% trans 'Recent tags' %}</a>
+</li>
+       <li id="nav_featured">
+        <a href="% url pytonica-featured %" title="{% trans 'Featured users' %}">{% trans 'Featured' %}</a>
+</li>
+       <li id="nav_timeline_favorited">
+        <a href="% url pythonica-popular %" title="{% trans 'Popular notices' %}">{% trans 'Popular' %}</a>
+</li>
+</ul>
+</dd>
+</dl>
+    <div id="content">
+{% block content %}
+{% endblock content %}
+</div>
+   <div id="footer">
+    <dl id="site_nav_global_secondary">
+     <dt>{% trans 'Secondary site navigation' %}</dt>
+     <dd>
+      <ul class="nav">
+        {# @todo: list of translatable pages: Help, About, FAQ, Privacy, Source, Contact #}
+</ul>
+</dd>
+</dl>
+    <dl id="licenses">
+     <dt id="site_laconica_license">{% trans 'Pythonica software license' %}</dt>
+     <dd><p>{% blocktrans with site.name as site_name %}<strong>{{ site_name }}</strong> is a microblogging service. It runs the <a href="http://pythonica.nophp.ru/">Pythonica</a> microblogging software available under the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.{% endblocktrans %}</p>
+</dd>
+</dl>
+
+{% endblock body %}
