@@ -86,11 +86,11 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
         </ul>
      </dd>
 </dl>
-    <form id="form_notice" class="form" method="post" action="{% pythonica-post %}">
+    <form id="form_notice" class="form" method="post" action="{% url pythonica-post %}">
      <fieldset>
 
       <legend>{% trans 'Send a notice' %}</legend>
-      {{ notice_form.label }}
+      {{ notice_form.text.label }}
       {{ notice_form.text }}
       <dl class="form_note">
        <dt>{% trans 'Available characters' %}</dt>
