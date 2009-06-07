@@ -27,8 +27,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 <link rel="icon" type="image/png" href="/media/images/favicon.png" />
 
 {% block css %}
-<link rel="stylesheet" href="/media/css/default.css" type="text/css" />
-{% endblock %}
+{% endblock css %}
 
 {% block rss %}
 {% endblock rss %}
@@ -37,7 +36,13 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 <body>
 
+{% block body %}
+
 <div id="main">
+
+{% block header %}
+<h1>{{ site.name }}</h1>
+{% endblock header %}
 
 {% block messages %}
 <div id="messages">
@@ -50,10 +55,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
     {% endif %}
 </div>
 {% endblock %}
-
-{% block header %}
-<h1>{{ site.name }}</h1>
-{% endblock header %}
 
 {% block content %}
 <div id="content">
@@ -77,7 +78,10 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 </p>
 {% endif %}
 </div>
-{% endblock %}
+{% endblock debug %}
+
+{% endblock body %}
+
 </body>
 
 </html>

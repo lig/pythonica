@@ -48,10 +48,10 @@ def render_to(template):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
                 return direct_to_template(request,
-                    '/'.join(('pythonica', output[1],)), output[0])
+                    '/'.join((settings.PYTHONICA_THEME, output[1],)), output[0])
             elif isinstance(output, dict):
                 return direct_to_template(request,
-                    '/'.join(('pythonica', template,)), output)
+                    '/'.join((settings.PYTHONICA_THEME, template,)), output)
             return output
         return wrapper
     return renderer

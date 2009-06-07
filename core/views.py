@@ -51,7 +51,7 @@ def post(request):
             return redirect('pythonica-all', username=notice.author)
     
     else:
-        noticeForm = NoticeForm()
+        return redirect('pythonica-index')
     
     return {'notice_form': noticeForm,}
 

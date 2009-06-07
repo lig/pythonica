@@ -59,3 +59,5 @@ if DEBUG == True:
     INSTALLED_APPS += (
         'django_evolution',
     )
+
+PYTHONICA_THEME = 'laconica'
