@@ -75,15 +75,15 @@ class Group(models.Model):
         ordering = ['name',]
 
 
-class Input(models.Model):
+class Device(models.Model):
     """
-    @note: input source for notices
+    @note: devices that could be used for posting or could be noticed
     """
     
-    name = models.CharField(_('input name'), max_length=140)
-    url = models.URLField(_('input url'), blank=True, null=True)
-    """ @todo: automate input notices counter """
-    # notices_count = models.PositiveIntegerField(_('input notices count'), default=0)
+    name = models.CharField(_('device name'), max_length=140)
+    url = models.URLField(_('device url'), blank=True, null=True)
+    """ @todo: automate device notices counter """
+    # notices_count = models.PositiveIntegerField(_('device notices count'), default=0)
     
     def __unicode__(self):
         return u'%s' % self.name
@@ -92,8 +92,8 @@ class Input(models.Model):
         return url
     
     class Meta():
-        verbose_name = _('input')
-        verbose_name_plural = _('inputs')
+        verbose_name = _('device')
+        verbose_name_plural = _('devices')
         ordering = ['name',]
 
 
@@ -106,7 +106,7 @@ class Notice(models.Model):
     posted = models.DateTimeField(_('notice posted at'), auto_now_add=True)
     author = models.ForeignKey(User, verbose_name=_('notice author'))
     text = models.CharField(_('notice text'), max_length=140)
-    via = models.ForeignKey(Input, verbose_name=_('notice sent via'))
+    via = models.ForeignKey(Device, verbose_name=_('notice sent via'))
     in_reply_to = models.ManyToManyField('self', symmetrical=False,
         related_name='replies', verbose_name=_('notice is in reply to'),
         null=True)

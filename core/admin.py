@@ -19,6 +19,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import admin
 
-from models import Follow, Group, Input, Notice, Tag, UserInfo
+from models import Follow, Group, Device, Notice, Tag, UserInfo
 
-admin.site.register((Follow, Group, Input, Notice, Tag, UserInfo))
+admin.site.register((Follow, Group, Device, Notice, Tag, UserInfo))
