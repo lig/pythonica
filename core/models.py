@@ -195,7 +195,7 @@ class UserInfo(models.Model):
         verbose_name=_('user last notice'))
     is_featured = models.BooleanField(_('is user featured'), default=False)
     favorites = models.ManyToManyField(Notice, related_name='favorited',
-        verbose_name=_('user favorite notices'))
+        verbose_name=_('user favorite notices'), blank=True)
     
     def __unicode__(self):
         return u'%s' % self.user
