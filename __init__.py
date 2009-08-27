@@ -16,7 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
-@todo: move to AGPL
 @todo: site license admin with possibility to require user to approve some of
     them
 """
