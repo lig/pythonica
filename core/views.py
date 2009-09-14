@@ -34,6 +34,7 @@ def index(request):
     last_notices = Notice.objects.public()[:10]
     return {'last_notices': last_notices,}
 
+
 @login_required
 @render_to('post.html')
 def post(request):
@@ -47,13 +48,16 @@ def post(request):
             """ 1 for web """
             notice.via_id = 1
             notice.save()
+            if noticeForm.cleaned_data['in_reply_to']:
+                notice.in_reply_to = noticeForm.cleaned_data['in_reply_to'],
             request.user.message_set.create(message=_('Your notice added'))
             return redirect('pythonica-all', username=notice.author)
     
     else:
         return redirect('pythonica-index')
     
-    return {'notice_form': noticeForm,}
+    return {'error_notice_form': noticeForm,}
+
 
 @login_required
 @render_to('all.html')

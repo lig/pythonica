@@ -1,4 +1,4 @@
-{% comment %}
+{% load i18n %}{% comment %}
 Copyright 2009 Serge Matveenko
 
 This file is part of Pythonica.
@@ -23,6 +23,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 <div class="notice text">{{ notice.text }}</div>
 <div class="notice posted">{{ notice.posted|timesince }}</div>
 <div class="notice device">{{ notice.device }}</div>
-<div class="notice reply">{{ notice.in_reply_to.all }}</div>
+<div class="notice in_reply_to">{{ notice.in_reply_to.all }}</div>
+<div class="notice reply"><a href="#notice_form" onclick="document.getElementById('id_in_reply_to').value='{{ notice.id }}';">{% trans 'reply' %}</a></div>
 </div>
 <hr />
