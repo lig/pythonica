@@ -61,8 +61,8 @@ class Group(models.Model):
         verbose_name=_('group owner'))
     """ @todo: automate group users counter """
     # users_count = models.PositiveIntegerField(_('group users count'), default=0)
-    """ @todo: automate group notices counter """
-    # notices_count = models.PositiveIntegerField(_('group notices count'), default=0)
+    notices_count = models.PositiveIntegerField(_('group notices count'),
+        default=0)
     
     def __unicode__(self):
         return u'%s' % self.name

@@ -22,12 +22,17 @@ from django.db.models.signals import post_save
 from models import Notice
 
 
-def count_device_notices(*args, **kwargs):
+def count_notices(*args, **kwargs):
     
-    device = kwargs['instance'].via
+    notice = kwargs['instance']
     
+    device = notice.via
     device.notices_count = device.notice_set.count()
     device.save()
+    
+    for group in notice.groups.all():
+        group.notices_count = group.notice_set.count()
+        group.save()
 
 
-post_save.connect(count_device_notices, Notice)
+post_save.connect(count_notices, Notice)
