@@ -89,7 +89,7 @@ class Device(models.Model):
         return u'%s' % self.name
     
     def get_absolute_url(self):
-        return url
+        return self.url
     
     class Meta():
         verbose_name = _('device')
