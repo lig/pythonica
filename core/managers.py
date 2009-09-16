@@ -22,4 +22,5 @@ from django.db import models
 class NoticeManager(models.Manager):
     
     def public(self):
-        return self.get_query_set().filter(is_restricted=False)
+        return self.get_query_set().select_related().filter(
+            is_restricted=False)

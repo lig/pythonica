@@ -19,7 +19,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ media_url }}css/laconica.css" type="text/css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}css/laconica.css" type="text/css" />
 {% endblock %}
 
 {% block body %}
@@ -28,8 +28,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
    <div id="header">
     <address id="site_contact" class="vcard">
      <a class="url home bookmark" href="{% url pythonica-index %}">
-      {# @todo: we need logo #}
-      <img class="logo photo" src="{{ media_url }}images/logo.png" alt="{{ site.name }}"/>
+      <img class="logo photo" src="{{ MEDIA_URL }}images/logo.png" alt="{{ site.name }}"/>
       <span class="fn org">{{ site.name }}</span>
 </a>
 
@@ -130,6 +129,8 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% block content %}
 {% endblock content %}
 </div>
+</div>
+</div>
    <div id="footer">
     <dl id="site_nav_global_secondary">
      <dt>{% trans 'Secondary site navigation' %}</dt>
@@ -144,5 +145,5 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
      <dd><p>{% blocktrans with site.name as site_name %}<strong>{{ site_name }}</strong> is a microblogging service. It runs the <a href="http://pythonica.nophp.ru/">Pythonica</a> microblogging software available under the <a href="http://www.fsf.org/licensing/licenses/gpl-3.0.html">GNU General Public License</a>.{% endblocktrans %}</p>
 </dd>
 </dl>
-
+</div>
 {% endblock body %}

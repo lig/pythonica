@@ -1,0 +1,65 @@
+{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+        <li class="hentry notice" id="notice-5022629">
+         <div class="entry-title">
+         
+         {% with notice.author as user %}{% include 'laconica/inc/user_link.html' %}{% endwith %}
+         
+          <p class="entry-content">{{ notice.text }}</p>
+</div>
+         <div class="entry-content">
+          <dl class="timestamp">
+
+           <dt>{% trans 'Published' %}</dt>
+           <dd>
+            <a rel="bookmark" href="{{ notice.get_absolute_url }}">
+             <abbr class="published" title="{{ notice.posted }}">{{ notice.posted|timesince }}</abbr>
+</a>
+</dd>
+</dl>
+          <dl class="device">
+           <dt>{% trans 'From' %}</dt>
+
+           <dd>
+            <a href="{{ notice.via.url }}" rel="external">{{ notice.via.name }}</a>
+</dd>
+</dl>
+</div>
+         <div class="notice-options">
+          <form id="favor-5022629" class="form_favor" method="post" action="http://identi.ca/main/favor">
+           <fieldset>
+            <legend>Favor this notice</legend>
+
+            <input name="token-5022629" type="hidden" id="token-5022629" value="db0e0354dcc97d79ca8d383424d0cb87feb22ce23434fc5da0705e254e120e1c7c49d28aed931a62519f603395ecb5db45a32059ab72100e8923e3ea370772cf"/>
+            <input name="notice" type="hidden" id="notice-n5022629" value="5022629"/>
+            <input type="submit" id="favor-submit-5022629" name="favor-submit-5022629" class="submit" value="Пометить" title="Favor this notice"/>
+</fieldset>
+</form>
+          <dl class="notice_reply">
+           <dt>Reply to this notice</dt>
+           <dd>
+            <a href="http://identi.ca/notice/new?replyto=datainadequate" title="Reply to this notice">Reply             <span class="notice_id">5022629</span>
+
+</a>
+</dd>
+</dl>
+</div>
+</li>

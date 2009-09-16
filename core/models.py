@@ -117,7 +117,9 @@ class Device(models.Model):
 
 class Notice(models.Model):
     """
-    @note: Notice itself 
+    @note: Notice itself
+    @todo: Make templatetag for notice text formating
+    @todo: Automate notice favorites count
     """
     objects = NoticeManager()
     
@@ -134,6 +136,8 @@ class Notice(models.Model):
         null=True, blank=True)
     is_restricted = models.BooleanField(_('is notice restricted'),
         default=False)
+    favorited_count = models.PositiveIntegerField(_('notice favorites count'),
+        default=0)
     
     def save(self, *args, **kwargs):
         
@@ -204,6 +208,7 @@ class UserInfo(models.Model):
     """
     @note: pythonica specific user info (we don't want to use django profile
         feature)
+    @todo: add avatars
     """
     
     user = models.OneToOneField(User, related_name='info',
