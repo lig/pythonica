@@ -59,8 +59,9 @@ class Group(models.Model):
     is_closed = models.BooleanField(_('is group closed'), default=False)
     owner = models.ForeignKey(User, related_name='owned_groups',
         verbose_name=_('group owner'))
-    """ @todo: automate group users and notices counters """
+    """ @todo: automate group users counter """
     # users_count = models.PositiveIntegerField(_('group users count'), default=0)
+    """ @todo: automate group notices counter """
     # notices_count = models.PositiveIntegerField(_('group notices count'), default=0)
     
     def __unicode__(self):
