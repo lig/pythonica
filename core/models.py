@@ -155,8 +155,7 @@ class Notice(models.Model):
         if self.groups.filter(is_closed=True).count() > 0:
             self.is_restricted = True
         
-        """ process users
-            @todo: find better way """
+        """ process users """
         user_info_list = UserInfo.objects.filter(user__username__in=users)
         self.in_reply_to = (user_info.last for user_info in user_info_list)
         
