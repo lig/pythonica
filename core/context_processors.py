@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from django.conf import settings
 from django.contrib.sites.models import Site
 
 from forms import NoticeForm
@@ -27,7 +26,6 @@ def pythonica_context(request):
     noticeForm = NoticeForm()
     
     return {
-        'media_url': settings.MEDIA_URL,
         'site': Site.objects.get_current(),
         'notice_form': noticeForm,
     }

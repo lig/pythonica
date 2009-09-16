@@ -24,6 +24,7 @@ from django.utils.translation import ugettext_lazy as _
 from managers import NoticeManager
 from utils import get_tags_groups_users
 
+
 class Tag(models.Model):
     """
     @note: tags for notices, groups, users  
@@ -53,14 +54,16 @@ class Group(models.Model):
     name = models.CharField(_('group name'), max_length=140, unique=True)
     tags = models.ManyToManyField(Tag, verbose_name=_('group tags'),
         blank=True)
-    users = models.ManyToManyField(User, related_name='followed_groups',
-        verbose_name=_('group users'), blank=True)
+    users = models.ManyToManyField(User, through='GroupUser',
+        related_name='followed_groups', verbose_name=_('group users'),
+        blank=True)
     is_closed = models.BooleanField(_('is group closed'), default=False)
     owner = models.ForeignKey(User, related_name='owned_groups',
         verbose_name=_('group owner'))
-    """ @todo: automate group users and notices counters """
-    # users_count = models.PositiveIntegerField(_('group users count'), default=0)
-    # notices_count = models.PositiveIntegerField(_('group notices count'), default=0)
+    users_count = models.PositiveIntegerField(_('group users count'),
+        default=0)
+    notices_count = models.PositiveIntegerField(_('group notices count'),
+        default=0)
     
     def __unicode__(self):
         return u'%s' % self.name
@@ -75,25 +78,40 @@ class Group(models.Model):
         ordering = ['name',]
 
 
-class Input(models.Model):
+class GroupUser(models.Model):
     """
-    @note: input source for notices
+    @note: explicit model declaration for many-to-many group/user relationship
     """
     
-    name = models.CharField(_('input name'), max_length=140)
-    url = models.URLField(_('input url'), blank=True, null=True)
-    """ @todo: automate input notices counter """
-    # notices_count = models.PositiveIntegerField(_('input notices count'), default=0)
+    group = models.ForeignKey(Group)
+    user = models.ForeignKey(User)
+    
+    def __unicode__(self):
+        return u'%s in %s' % (self.user, self.group)
+    
+    class Meta():
+        unique_together = ('group', 'user',)
+
+
+class Device(models.Model):
+    """
+    @note: devices that could be used for posting or could be noticed
+    """
+    
+    name = models.CharField(_('device name'), max_length=140)
+    url = models.URLField(_('device url'), blank=True, null=True)
+    notices_count = models.PositiveIntegerField(_('device notices count'),
+        default=0)
     
     def __unicode__(self):
         return u'%s' % self.name
     
     def get_absolute_url(self):
-        return url
+        return self.url
     
     class Meta():
-        verbose_name = _('input')
-        verbose_name_plural = _('inputs')
+        verbose_name = _('device')
+        verbose_name_plural = _('devices')
         ordering = ['name',]
 
 
@@ -106,14 +124,14 @@ class Notice(models.Model):
     posted = models.DateTimeField(_('notice posted at'), auto_now_add=True)
     author = models.ForeignKey(User, verbose_name=_('notice author'))
     text = models.CharField(_('notice text'), max_length=140)
-    via = models.ForeignKey(Input, verbose_name=_('notice sent via'))
+    via = models.ForeignKey(Device, verbose_name=_('notice sent via'))
     in_reply_to = models.ManyToManyField('self', symmetrical=False,
         related_name='replies', verbose_name=_('notice is in reply to'),
-        null=True)
+        null=True, blank=True)
     tags = models.ManyToManyField(Tag, verbose_name=_('notice tags'),
-        null=True)
+        null=True, blank=True)
     groups = models.ManyToManyField(Group, verbose_name=_('notice groups'),
-        null=True)
+        null=True, blank=True)
     is_restricted = models.BooleanField(_('is notice restricted'),
         default=False)
     
@@ -137,8 +155,7 @@ class Notice(models.Model):
         if self.groups.filter(is_closed=True).count() > 0:
             self.is_restricted = True
         
-        """ process users
-            @todo: find better way """
+        """ process users """
         user_info_list = UserInfo.objects.filter(user__username__in=users)
         self.in_reply_to = (user_info.last for user_info in user_info_list)
         
@@ -146,8 +163,7 @@ class Notice(models.Model):
         self.author.info.last = self
         self.author.info.save()
         
-        """ save self again and
-            @todo: send signal to notifier """
+        """ save self again and """
         super(Notice, self).save()
         
     
@@ -162,6 +178,7 @@ class Notice(models.Model):
         verbose_name = _('notice')
         verbose_name_plural = _('notices')
         ordering = ['-posted',]
+
 
 class Follow(models.Model):
     """
@@ -182,11 +199,11 @@ class Follow(models.Model):
         verbose_name_plural = _('follows')
         ordering = ['follower', 'followed',]
 
+
 class UserInfo(models.Model):
     """
     @note: pythonica specific user info (we don't want to use django profile
         feature)
-    @todo: automate user info creation
     """
     
     user = models.OneToOneField(User, related_name='info',
@@ -195,7 +212,7 @@ class UserInfo(models.Model):
         verbose_name=_('user last notice'))
     is_featured = models.BooleanField(_('is user featured'), default=False)
     favorites = models.ManyToManyField(Notice, related_name='favorited',
-        verbose_name=_('user favorite notices'))
+        verbose_name=_('user favorite notices'), blank=True)
     
     def __unicode__(self):
         return u'%s' % self.user

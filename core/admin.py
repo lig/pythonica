@@ -19,6 +19,8 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib import admin
 
-from models import Follow, Group, Input, Notice, Tag, UserInfo
+from models import Follow, Group, Device, Notice, Tag, UserInfo, GroupUser
 
-admin.site.register((Follow, Group, Input, Notice, Tag, UserInfo))
+
+""" @todo: make GroupUser inline model admin """
+admin.site.register((Follow, Group, Device, Notice, Tag, UserInfo, GroupUser))

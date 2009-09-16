@@ -22,9 +22,10 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 {% if user.is_authenticated %}
 
+<a name="notice_form"></a>
 <form action="{% url pythonica-post %}" method="post">
-{{ notice_form }}
-<input type="submit" value="{% trans 'ok' %}" >
+{{ notice_form.as_p }}
+<p><input type="submit" value="{% trans 'ok' %}" ></p>
 </form>
 
 {% else %}
