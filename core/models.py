@@ -24,6 +24,7 @@ from django.utils.translation import ugettext_lazy as _
 from managers import NoticeManager
 from utils import get_tags_groups_users
 
+
 class Tag(models.Model):
     """
     @note: tags for notices, groups, users  
@@ -82,8 +83,8 @@ class Device(models.Model):
     
     name = models.CharField(_('device name'), max_length=140)
     url = models.URLField(_('device url'), blank=True, null=True)
-    """ @todo: automate device notices counter """
-    # notices_count = models.PositiveIntegerField(_('device notices count'), default=0)
+    notices_count = models.PositiveIntegerField(_('device notices count'),
+        default=0)
     
     def __unicode__(self):
         return u'%s' % self.name
