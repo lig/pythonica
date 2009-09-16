@@ -17,9 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
-from models import Notice, GroupUser
+from models import Notice, GroupUser, UserInfo
 
 
 def count_notices(*args, **kwargs):
@@ -42,5 +43,14 @@ def count_group_users(*args, **kwargs):
     group.save()
 
 
+def create_user_info(*args, **kwargs):
+    
+    if kwargs['created']:
+        user = kwargs['instance']
+        user_info = UserInfo(user=user)
+        user_info.save()
+
+
 post_save.connect(count_notices, Notice)
 post_save.connect(count_group_users, GroupUser)
+post_save.connect(create_user_info, User)

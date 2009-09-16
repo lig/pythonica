@@ -127,11 +127,11 @@ class Notice(models.Model):
     via = models.ForeignKey(Device, verbose_name=_('notice sent via'))
     in_reply_to = models.ManyToManyField('self', symmetrical=False,
         related_name='replies', verbose_name=_('notice is in reply to'),
-        null=True)
+        null=True, blank=True)
     tags = models.ManyToManyField(Tag, verbose_name=_('notice tags'),
-        null=True)
+        null=True, blank=True)
     groups = models.ManyToManyField(Group, verbose_name=_('notice groups'),
-        null=True)
+        null=True, blank=True)
     is_restricted = models.BooleanField(_('is notice restricted'),
         default=False)
     
@@ -206,7 +206,6 @@ class UserInfo(models.Model):
     """
     @note: pythonica specific user info (we don't want to use django profile
         feature)
-    @todo: automate user info creation
     """
     
     user = models.OneToOneField(User, related_name='info',
