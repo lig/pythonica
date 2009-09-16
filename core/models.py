@@ -163,8 +163,7 @@ class Notice(models.Model):
         self.author.info.last = self
         self.author.info.save()
         
-        """ save self again and
-            @todo: send signal to notifier """
+        """ save self again and """
         super(Notice, self).save()
         
     
