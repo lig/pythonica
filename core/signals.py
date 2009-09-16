@@ -19,7 +19,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.db.models.signals import post_save
 
-from models import Notice
+from models import Notice, GroupUser
 
 
 def count_notices(*args, **kwargs):
@@ -35,4 +35,12 @@ def count_notices(*args, **kwargs):
         group.save()
 
 
+def count_group_users(*args, **kwargs):
+    
+    group = kwargs['instance'].group
+    group.users_count = group.users.count()
+    group.save()
+
+
 post_save.connect(count_notices, Notice)
+post_save.connect(count_group_users, GroupUser)

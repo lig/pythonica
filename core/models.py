@@ -54,13 +54,14 @@ class Group(models.Model):
     name = models.CharField(_('group name'), max_length=140, unique=True)
     tags = models.ManyToManyField(Tag, verbose_name=_('group tags'),
         blank=True)
-    users = models.ManyToManyField(User, related_name='followed_groups',
-        verbose_name=_('group users'), blank=True)
+    users = models.ManyToManyField(User, through='GroupUser',
+        related_name='followed_groups', verbose_name=_('group users'),
+        blank=True)
     is_closed = models.BooleanField(_('is group closed'), default=False)
     owner = models.ForeignKey(User, related_name='owned_groups',
         verbose_name=_('group owner'))
-    """ @todo: automate group users counter """
-    # users_count = models.PositiveIntegerField(_('group users count'), default=0)
+    users_count = models.PositiveIntegerField(_('group users count'),
+        default=0)
     notices_count = models.PositiveIntegerField(_('group notices count'),
         default=0)
     
@@ -75,6 +76,21 @@ class Group(models.Model):
         verbose_name = _('group')
         verbose_name_plural = _('groups')
         ordering = ['name',]
+
+
+class GroupUser(models.Model):
+    """
+    @note: explicit model declaration for many-to-many group/user relationship
+    """
+    
+    group = models.ForeignKey(Group)
+    user = models.ForeignKey(User)
+    
+    def __unicode__(self):
+        return u'%s in %s' % (self.user, self.group)
+    
+    class Meta():
+        unique_together = ('group', 'user',)
 
 
 class Device(models.Model):
@@ -165,6 +181,7 @@ class Notice(models.Model):
         verbose_name_plural = _('notices')
         ordering = ['-posted',]
 
+
 class Follow(models.Model):
     """
     @note: follow relationships
@@ -183,6 +200,7 @@ class Follow(models.Model):
         verbose_name = _('follow')
         verbose_name_plural = _('follows')
         ordering = ['follower', 'followed',]
+
 
 class UserInfo(models.Model):
     """
