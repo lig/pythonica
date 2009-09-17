@@ -125,11 +125,18 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 </ul>
 </dd>
 </dl>
-    <div id="content">
+
+<div id="content">
 {% block content %}
 {% endblock content %}
 </div>
+
+<div id="aside_primary" class="aside">
+{% block side %}
+{% include 'laconica/inc/side.html' %}
+{% endblock side %}
 </div>
+
 </div>
    <div id="footer">
     <dl id="site_nav_global_secondary">
@@ -146,4 +153,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 </dd>
 </dl>
 </div>
+
+</div>
+
 {% endblock body %}

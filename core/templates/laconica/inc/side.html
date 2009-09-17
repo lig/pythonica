@@ -1,0 +1,30 @@
+{% load i18n %}
+
+     <div id="export_data" class="section">
+      <h2>{% trans 'Export data' %}</h2>
+      <ul class="xoxo">
+       <li>
+        <a href="% rss1 %" class="rss" type="application/rdf+xml" title="{% trans 'Public Stream Feed' %} (RSS 1.0)">RSS 1.0</a>
+</li>
+       <li>
+        <a href="% rss2 %" class="rss" type="application/rss+xml" title="{% trans 'Public Stream Feed' %} (RSS 2.0)">RSS 2.0</a>
+
+</li>
+       <li>
+        <a href="% atom %" class="atom" type="application/atom+xml" title="{% trans 'Public Stream Feed' %} (Atom)">Atom</a>
+</li>
+</ul>
+</div>
+     <div id="popular_notices" class="section">
+      <h2>{% trans 'Popular notices' %}</h2>
+      <ul class="notices">
+
+{% for notice in popular_notices %}
+{% include 'laconica/inc/notice_short.html' %}
+{% endfor %}
+
+</ul>
+      <p>
+       <a href="http://identi.ca/favorited" class="more">{% trans 'More...' %}</a>
+</p>
+</div>
