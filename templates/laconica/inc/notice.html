@@ -1,0 +1,64 @@
+{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+        <li class="hentry notice" id="notice-5022629">
+         <div class="entry-title">
+         
+         {% with notice.author as user %}{% include 'inc/user_link.html' %}{% endwith %}
+         
+          <p class="entry-content">{{ notice.text }}</p>
+</div>
+         <div class="entry-content">
+          <dl class="timestamp">
+
+           <dt>{% trans 'Published' %}</dt>
+           <dd>
+            <a rel="bookmark" href="{{ notice.get_absolute_url }}">
+             <abbr class="published" title="{{ notice.posted }}">{{ notice.posted|timesince }}</abbr>
+</a>
+</dd>
+</dl>
+          <dl class="device">
+           <dt>{% trans 'From' %}</dt>
+
+           <dd>
+            <a href="{{ notice.via.url }}" rel="external">{{ notice.via.name }}</a>
+</dd>
+</dl>
+</div>
+         <div class="notice-options">
+          <form id="favor-{{ notice.id }}" class="form_favor" method="post" action="% favor %">
+           <fieldset>
+            <legend>{% trans 'Favor this notice' %}</legend>
+
+            <input type="submit" id="favor-submit-{{ notice.id }}" name="favor-submit-{{ notice.id }}" class="submit" value="{% trans 'Favor' %}" title="{% trans 'Favor this notice' %}"/>
+</fieldset>
+</form>
+          <dl class="notice_reply">
+           <dt>{% trans 'Reply to this notice' %}</dt>
+           <dd>
+            {# @todo: Add @username to notice form via JS #}
+            <a href="#notice_form" title="{% trans 'Reply to this notice' %}"  onclick="document.getElementById('id_in_reply_to').value='{{ notice.id }}'; return false;">Reply <span class="notice_id">{{ notice.id }}</span>
+
+</a>
+</dd>
+</dl>
+</div>
+</li>

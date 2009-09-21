@@ -19,6 +19,12 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 
+
+PYTHONICA_THEME = 'pythonica'
+
+HASHTAG_REGEX = r'[a-zA-Z0-9_\.\-]+'
+USERNAME_REGEX = r'\w+'
+
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),
     os.path.pardir))
 
@@ -99,7 +105,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, MEDIA_ROOT, 'css'),
+    os.path.join(PROJECT_ROOT, 'templates', PYTHONICA_THEME),
+    os.path.join(PROJECT_ROOT, 'templates'),
 )
 
 INSTALLED_APPS = (
@@ -109,8 +116,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    # libs
+    'registration',
     # pythonica
-    'core'
+    'core',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -123,7 +132,4 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'core.context_processors.pythonica_context',
 )
 
-HASHTAG_REGEX = r'[a-zA-Z0-9_\.\-]+'
-USERNAME_REGEX = r'\w+'
-
-PYTHONICA_THEME = 'pythonica'
+AUTH_PROFILE_MODULE = 'core.UserInfo'

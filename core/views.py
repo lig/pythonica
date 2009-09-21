@@ -61,6 +61,28 @@ def post(request):
 
 
 @login_required
+@render_to('profile_form.html')
+def edit_profile(request):
+    """
+    lest user edit her info
+    """
+    
+    return {}
+
+
+@login_required
+@render_to('profile.html')
+def profile(request, username):
+    """
+    show user info
+    
+    @todo: make this view public via login_proposed decorator
+    """
+    
+    return {}
+
+
+@login_required
 @render_to('all.html')
 def list_all(request, username):
     """
@@ -68,7 +90,9 @@ def list_all(request, username):
     notices to groups user in
     and we must show restricted notices (notices to closed groups) to these
     groups members only
-    """ 
+    
+    @todo: make this view public via login_proposed decorator
+    """
     
     try:
         list_owner = User.objects.get(username=username)
@@ -86,3 +110,4 @@ def list_all(request, username):
         q_from_groups)
     
     return {'list_owner': list_owner, 'notices': notices,}
+

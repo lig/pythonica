@@ -47,11 +47,9 @@ def render_to(template):
         def wrapper(request, *args, **kw):
             output = func(request, *args, **kw)
             if isinstance(output, (list, tuple)):
-                return direct_to_template(request,
-                    '/'.join((settings.PYTHONICA_THEME, output[1],)), output[0])
+                return direct_to_template(request, output[1], output[0])
             elif isinstance(output, dict):
-                return direct_to_template(request,
-                    '/'.join((settings.PYTHONICA_THEME, template,)), output)
+                return direct_to_template(request, template, output)
             return output
         return wrapper
     return renderer

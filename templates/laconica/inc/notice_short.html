@@ -1,4 +1,4 @@
-"""
+{% comment %}
 Copyright 2009 Serge Matveenko
 
 This file is part of Pythonica.
@@ -15,23 +15,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
-"""
+{% endcomment %}
 
-import os
+       <li class="hentry notice">
 
-from django.conf import settings
-from django.conf.urls.defaults import *
+        <div class="entry-title">
+        
+        {% with notice.author as user %}{% include 'inc/user_link_short.html' %}{% endwith %}
 
-patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
-    'views',))
+         <p class="entry-content">{{ notice.text }}</p>
 
-urlpatterns = patterns(patterns_prefix,
-    (r'^$', 'index', {}, 'pythonica-index'),
-    (r'^page/(?P<page>\d+)$', 'index', {}, 'pythonica-index'),
-    (r'^post/$', 'post', {}, 'pythonica-post'),
-    (r'^accounts/profile/$', 'edit_profile', {}, 'pythonica-profile-edit'),
-    (r'^(?P<username>%s)/$' % settings.USERNAME_REGEX, 'profile', {},
-        'pythonica-profile'),
-    (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
-        'pythonica-all'),
-)
+</div>
+</li>

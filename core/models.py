@@ -206,8 +206,7 @@ class Follow(models.Model):
 
 class UserInfo(models.Model):
     """
-    @note: pythonica specific user info (we don't want to use django profile
-        feature)
+    @note: pythonica specific user info
     @todo: add avatars
     """
     

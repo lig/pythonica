@@ -34,8 +34,12 @@ urlpatterns = patterns('',
     (r'^', include('core.urls')),
     
     (r'^admin/', include(admin.site.urls)),
-    (r'^%s/css/(?P<template>.*)$' % media_url, direct_to_template,
-        {'mimetype': 'text/css'}, 'css'),
+    
+    # django-registration http://pypi.python.org/pypi/django-registration
+    (r'^accounts/', include('registration.urls')),
+    
+    # serve css
+    (r'^(?P<template>css/.*)/$', direct_to_template, {'mimetype': 'text/css'}),
     
     # @warning: not for production use, for testing purposes only
     (r'^%s/(?P<path>.*)$' % media_url, serve,

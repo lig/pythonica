@@ -1,4 +1,5 @@
-"""
+{% extends 'base.html' %}{% load i18n %}
+{% comment %}
 Copyright 2009 Serge Matveenko
 
 This file is part of Pythonica.
@@ -15,23 +16,28 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
-"""
+{% endcomment %}
 
-import os
+{% block content %}
 
-from django.conf import settings
-from django.conf.urls.defaults import *
+{% if form.errors %}
+<p>{% trans "Your username and password didn't match. Please try again." %}</p>
+{% endif %}
 
-patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
-    'views',))
+<form method="post" action="{% url auth_login %}">
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
 
-urlpatterns = patterns(patterns_prefix,
-    (r'^$', 'index', {}, 'pythonica-index'),
-    (r'^page/(?P<page>\d+)$', 'index', {}, 'pythonica-index'),
-    (r'^post/$', 'post', {}, 'pythonica-post'),
-    (r'^accounts/profile/$', 'edit_profile', {}, 'pythonica-profile-edit'),
-    (r'^(?P<username>%s)/$' % settings.USERNAME_REGEX, 'profile', {},
-        'pythonica-profile'),
-    (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
-        'pythonica-all'),
-)
+<input type="submit" value="{% trans 'Login' %}" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock content %}
