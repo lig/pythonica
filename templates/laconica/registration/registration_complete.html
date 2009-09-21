@@ -1,0 +1,37 @@
+{% extends 'base.html' %}{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+{% block content %}
+
+     <h1 class="entry-title">{% trans 'Registration successful' %}</h1>
+     <dl id="page_notice" class="system_notice">
+      <dt>{% trans 'Page notice' %}</dt>
+      <dd></dd>
+</dl>
+     <div id="content_inner" class="entry-content">
+      <div class="success">
+{% blocktrans %}
+<p>Thanks for signing up and we hope you enjoy using this service.</p>
+<p>(You should receive a message by email momentarily, with instructions on how to confirm your email address.)</p>
+{% endblocktrans %}
+</div>
+</div>
+
+{% endblock content %}

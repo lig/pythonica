@@ -1,0 +1,7 @@
+{% load i18n %}{% blocktrans with site.name as site_name and site.domain as site_domain %}
+You or somebody else have requested registration on {{ site_name }} ({{ site_domain }}).
+
+If you really want to activate your account, please, go to this url http://{{ site_domain }}/accounts/activate/{{ activation_key }} else just ignore this message.
+
+This message will expire in {{ expiration_days }} days.
+{% endblocktrans %}

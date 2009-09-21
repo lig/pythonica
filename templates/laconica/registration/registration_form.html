@@ -1,0 +1,82 @@
+{% extends 'base.html' %}{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+{% block content %}
+
+     <h1 class="entry-title">{% trans 'Register' %}</h1>
+     <dl id="page_notice" class="system_notice">
+      <dt>{% trans 'Page notice' %}</dt>
+      <dd>
+{% if form.errors %}
+{% for error in form.errors.non_form_errors %}
+<p class="error">{{ error }}</p>
+{% endfor %}
+{% else %}
+<div class="instructions"><p>{% blocktrans %}
+With this form you can create  a new account. You can then post notices and link up to friends and colleagues. (Have an <a href="http://openid.net/">OpenID</a>? Try our <a href="% url openid %">OpenID registration</a>!)
+{% endblocktrans %}</p></div>
+{% endif %}
+</dd>
+</dl>
+     <div id="content_inner" class="entry-content">
+      <form method="post" id="form_register" class="form_settings" action="">
+       <fieldset>
+        <legend>{% trans 'Account settings' %}</legend>
+        <ul class="form_data">
+         <li>
+          <label for="nickname">{% trans 'Nickname' %}</label>
+          {{ form.username }}
+          {% if form.username.errors %}{% for error in form.username.errors %}
+          <p class="error form_guide">{{ error }}</p>
+          {% endfor %}{% endif %}
+          <p class="form_guide">{% trans '1-64 lowercase letters or numbers, no punctuation or spaces. Required.' %}</p>
+</li>
+         <li>
+          <label for="password">{% trans 'Password' %}</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}{% for error in form.password1.errors %}
+          <p class="error form_guide">{{ error }}</p>
+          {% endfor %}{% endif %}
+          <p class="form_guide">{% trans 'Required.' %}</p>
+
+</li>
+         <li>
+          <label for="confirm">{% trans 'Confirm' %}</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}{% for error in form.password2.errors %}
+          <p class="error form_guide">{{ error }}</p>
+          {% endfor %}{% endif %}
+          <p class="form_guide">{% trans 'Same as password above. Required.' %}</p>
+</li>
+         <li>
+          <label for="email">{% trans 'Email' %}</label>
+          {{ form.email }}
+          {% if form.email.errors %}{% for error in form.email.errors %}
+          <p class="error form_guide">{{ error }}</p>
+          {% endfor %}{% endif %}
+          <p class="form_guide">Used only for updates, announcements, and password recovery</p>
+</li>
+</ul>
+        <input id="submit" name="submit" class="submit" value="{% trans 'Register' %}" title="" type="submit">
+</fieldset>
+</form>
+</div>
+
+{% endblock content %}

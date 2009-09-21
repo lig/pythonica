@@ -57,7 +57,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 </li>
 {% else %}
        <li id="nav_register">
-        <a href="% url register %" title="{% trans 'Create an account' %}">{% trans 'Register' %}</a>
+        <a href="{% url registration_register %}" title="{% trans 'Create an account' %}">{% trans 'Register' %}</a>
 </li>
        <li id="nav_openid">
         <a href="% url openid %" title="{% trans 'Login with OpenID' %}">{% trans 'OpenID' %}</a>

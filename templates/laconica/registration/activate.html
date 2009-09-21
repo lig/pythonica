@@ -1,0 +1,55 @@
+{% extends 'base.html' %}{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+{% block content %}
+
+{% if account %}
+
+{% url pythonica-profile username=account.username as url_profile %}
+{% url pythonica-profile-edit as url_profile_edit %}
+{% url pythonica-settings-im as url_settings_im %}
+{% url pythonica-search-people as url_search_people %}
+{% url pythonica-page-help as url_page_help %}
+
+     <h1 class="entry-title">{% trans 'Activation successful' %}</h1>
+     <dl id="page_notice" class="system_notice">
+      <dt>{% trans 'Page notice' %}</dt>
+      <dd></dd>
+</dl>
+     <div id="content_inner" class="entry-content">
+      <div class="success">
+{% blocktrans with account.username as username and site.name as site_name %}
+<p>Congratulations, {{ username }}! And welcome to {{ site_name }}. From here, you may want to...</p>
+<ul>
+<li>Go to <a href="{{ url_profile }}">your profile</a> and post your first message.</li>
+<li>Add a <a href="{{ url_settings_im }}">Jabber/GTalk address</a> so you can send notices through instant messages.</li>
+<li><a href="{{ url_search_people }}">Search for people</a> that you may know or that share your interests. </li>
+<li>Update your <a href="{{ url_profile_edit }}">profile settings</a> to tell others more about you. </li>
+<li>Read over the <a href="{{ url_page_help }}">online docs</a> for features you may have missed. </li>
+</ul>
+</div>
+</div>
+{% endblocktrans %}
+
+{% else %}
+<p>{% trans 'Unknown error.' %}</p>
+{% endif %}
+
+{% endblock content %}

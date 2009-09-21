@@ -22,6 +22,8 @@ import os
 
 PYTHONICA_THEME = 'pythonica'
 
+ACCOUNT_ACTIVATION_DAYS = 1
+
 HASHTAG_REGEX = r'[a-zA-Z0-9_\.\-]+'
 USERNAME_REGEX = r'\w+'
 
