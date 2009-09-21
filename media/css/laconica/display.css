@@ -1249,7 +1249,7 @@ color:#333;
 color:#000;
 }
 #form_notice.processing #notice_action-submit {
-background:#fff url(../../base/images/icons/icon_processing.gif) no-repeat 47% 47%;
+background:#fff url({{ MEDIA_URL }}images/laconica/icons/icon_processing.gif) no-repeat 47% 47%;
 cursor:wait;
 text-indent:-9999px;
 }
@@ -1293,13 +1293,13 @@ background-repeat:no-repeat;
 background-position:0 45%;
 }
 #export_data li a.rss {
-background-image:url(../../base/images/icons/icon_rss.png);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/icon_rss.png);
 }
 #export_data li a.atom {
-background-image:url(../../base/images/icons/icon_atom.png);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/icon_atom.png);
 }
 #export_data li a.foaf {
-background-image:url(../../base/images/icons/icon_foaf.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/icon_foaf.gif);
 }
 
 .entity_edit a,
@@ -1326,18 +1326,18 @@ background-color:#97BFD1;
 }
 
 .entity_edit a {
-background-image:url(../images/icons/twotone/green/edit.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/twotone/green/edit.gif);
 }
 .entity_send-a-message a {
-background-image:url(../images/icons/twotone/green/quote.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/twotone/green/quote.gif);
 }
 .entity_nudge p,
 .form_user_nudge input.submit {
-background-image:url(../images/icons/twotone/green/mail.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/twotone/green/mail.gif);
 }
 .form_user_block input.submit,
 .form_user_unblock input.submit {
-background-image:url(../images/icons/twotone/green/shield.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/twotone/green/shield.gif);
 }
 
 /* NOTICES */
@@ -1350,16 +1350,16 @@ background-color:#fcfcfc;
 background-color:transparent;
 }
 .notice-options .notice_reply a {
-background:transparent url(../images/icons/twotone/green/reply.gif) no-repeat 0 45%;
+background:transparent url({{ MEDIA_URL }}images/laconica/icons/twotone/green/reply.gif) no-repeat 0 45%;
 }
 .notice-options form.form_favor input.submit {
-background:transparent url(../images/icons/twotone/green/favourite.gif) no-repeat 0 45%;
+background:transparent url({{ MEDIA_URL }}images/laconica/icons/twotone/green/favourite.gif) no-repeat 0 45%;
 }
 .notice-options form.form_disfavor input.submit {
-background:transparent url(../images/icons/twotone/green/disfavourite.gif) no-repeat 0 45%;
+background:transparent url({{ MEDIA_URL }}images/laconica/icons/twotone/green/disfavourite.gif) no-repeat 0 45%;
 }
 .notice-options .notice_delete a {
-background:transparent url(../images/icons/twotone/green/trash.gif) no-repeat 0 45%;
+background:transparent url({{ MEDIA_URL }}images/laconica/icons/twotone/green/trash.gif) no-repeat 0 45%;
 }
 
 .notices div.entry-content,
@@ -1383,7 +1383,7 @@ background-color:#fcfcfc;
 /*END: NOTICES */
 
 #new_group a {
-background:transparent url(../images/icons/twotone/green/news.gif) no-repeat 0 45%;
+background:transparent url({{ MEDIA_URL }}images/laconica/icons/twotone/green/news.gif) no-repeat 0 45%;
 }
 
 .pagination .nav_prev a,
@@ -1392,10 +1392,10 @@ background-repeat:no-repeat;
 border-color:#D1D9E4;
 }
 .pagination .nav_prev a {
-background-image:url(../images/icons/twotone/green/arrow-left.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/twotone/green/arrow-left.gif);
 background-position:10% 45%;
 }
 .pagination .nav_next a {
-background-image:url(../images/icons/twotone/green/arrow-right.gif);
+background-image:url({{ MEDIA_URL }}images/laconica/icons/twotone/green/arrow-right.gif);
 background-position:90% 45%;
 }

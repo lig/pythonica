@@ -17,10 +17,16 @@ You should have received a copy of the GNU General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import os
+
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.views.static import serve
+from django.views.generic.simple import direct_to_template
+
+media_url = settings.MEDIA_URL.strip('/')
+
 
 admin.autodiscover()
 
@@ -28,8 +34,10 @@ urlpatterns = patterns('',
     (r'^', include('core.urls')),
     
     (r'^admin/', include(admin.site.urls)),
+    (r'^%s/css/(?P<template>.*)$' % media_url, direct_to_template,
+        {'mimetype': 'text/css'}, 'css'),
     
     # @warning: not for production use, for testing purposes only
-    (r'^%s/(?P<path>.*)$' % settings.MEDIA_URL.strip('/'), serve,
+    (r'^%s/(?P<path>.*)$' % media_url, serve,
         {'document_root': settings.MEDIA_ROOT,}),
 )
