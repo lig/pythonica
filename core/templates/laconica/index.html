@@ -31,7 +31,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
        <ul class="notices">
 
-{% for notice in last_notices %}
+{% for notice in last_notices.object_list %}
 {% include 'laconica/inc/notice.html' %}
 {% endfor %}
 
@@ -43,9 +43,16 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
         <dd>
          <ul class="nav">
-          <li class="nav_next">
-           <a href="% previous page %" rel="next">{% trans 'Before' %}</a>
-</li>
+            {% if last_notices.has_previous %}
+            <li class="nav_prev"> 
+                <a href="{% url pythonica-index page=last_notices.previous_page_number %}" rel="prev">{% trans 'After' %}</a> 
+            </li>
+            {% endif %}
+            {% if last_notices.has_next %}
+            <li class="nav_next"> 
+                <a href="{% url pythonica-index page=last_notices.next_page_number %}" rel="next">{% trans 'Before' %}</a>
+            </li> 
+            {% endif %}
 </ul>
 </dd>
 </dl>

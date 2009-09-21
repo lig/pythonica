@@ -19,6 +19,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.http import Http404
 from django.db.models import Q
 from django.shortcuts import redirect
@@ -30,9 +31,9 @@ from utils import render_to
 
 
 @render_to('index.html')
-def index(request):
-    last_notices = Notice.objects.public()[:10]
-    return {'last_notices': last_notices,}
+def index(request, page=1):
+    last_notices_pages = Paginator(Notice.objects.public(), 10)
+    return {'last_notices': last_notices_pages.page(page)}
 
 
 @login_required
