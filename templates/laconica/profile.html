@@ -1,0 +1,135 @@
+{% extends 'laconica/base.html' %}{% load i18n %}
+{% comment %}
+Copyright 2009 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+{% block content %}
+
+     <h1>{% firstof list_owner.get_full_name list_owner.username %} ({{ list_owner.username }})</h1>
+      <div class="entity_profile vcard author">
+       <h2>{% trans 'User profile' %}</h2>
+       <dl class="entity_depiction">
+        <dt>{% trans 'Photo' %}</dt>
+        <dd>
+         <img src="{{ MEDIA_URL }}images/laconica/default-avatar.png" class="photo avatar" alt="pythonica" height="100" width="100">
+</dd>
+
+        <dd>{% ifequal list_owner user %}
+<a href="% url pythonica-settings-avatar %">{% trans 'Edit Avatar' %}</a>
+{% endifequal %}</dd>
+</dl>
+       <dl class="entity_nickname">
+        <dt>{% trans 'Nickname' %}</dt>
+        <dd>
+         <a href="{{ list_owner.get_absolute_url }}" rel="me" class="nickname url uid">{{ list_owner.username }}</a>
+</dd>
+</dl>
+       <dl class="entity_fn">
+        <dt>{% trans 'Full name' %}</dt>
+        <dd>
+         <span class="fn">{{ list_owner.get_full_name }}</span>
+</dd>
+</dl>
+</div>
+      <div class="entity_actions">
+       <h2>{% trans 'User actions' %}</h2>
+       <ul>
+{% ifequal list_owner user %}
+        <li class="entity_edit">
+         <a href="http://identi.ca/settings/profile" title="Edit profile settings">Edit</a>
+</li>
+{% else %}
+        <li class="entity_subscribe">
+         <form id="subscribe-{{ list_owner.id }}" class="form_user_subscribe" method="post" action="% url pythonica-subscribe %">
+          <fieldset>
+           <legend>{% trans 'Subscribe to this user' %}</legend>
+           subscribe_form
+           <input id="submit" name="submit" class="submit" value="{% trans 'Subscribe' %}" title="{% trans 'Subscribe to this user' %}" type="submit">
+</fieldset>
+<input value="1" name="ajax" type="hidden"></form>
+</li>
+        <li class="entity_block">
+         <form id="block-55119" class="form_user_block" method="post" action="http://identi.ca/main/block">
+          <fieldset>
+           <legend>Block this user</legend>
+           <input name="token" id="token" value="1788bd019d8834324a4e6e7cd2eac1d4e329134d477f0e70ab0618685a2347b19d485b1211c456e17312f32312058b3ddc4e70ac8233063d8ad435a4cf0540ce" type="hidden">
+           <input name="blockto" id="blockto-55119" value="55119" type="hidden">
+           <input name="returnto-action" id="returnto-action" value="showstream" type="hidden">
+
+           <input name="returnto-nickname" id="returnto-nickname" value="lig" type="hidden">
+           <input id="submit" name="submit" class="submit" value="Block" title="Block this user" type="submit">
+</fieldset>
+</form>
+</li>
+{% endifequal %}
+</ul>
+</div>
+      <div id="notices_primary">
+       <h2>Notices</h2>
+       <ol class="notices xoxo"></ol>
+</div>
+      <div class="guide"><p>This is the timeline for pythonica but pythonica hasn't posted anything yet. Seen anything interesting recently? You haven't posted any notices yet, now would be a good time to start :)</p>
+
+</div>
+</div>
+
+     <dl id="page_notice" class="system_notice">
+      <dt>{% trans 'Page notice' %}</dt>
+      <dd></dd>
+</dl>
+     <div id="content_inner">
+      <div id="notices_primary">
+       <h2>{% trans 'Notices' %}</h2>
+
+       <ul class="notices">
+
+{% for notice in notices.object_list %}
+{% include 'inc/notice.html' %}
+{% empty %}
+{% ifequal list_owner user %}
+{% trans "Seen anything interesting recently? You haven't posted any notices yet, now would be a good time to start :)" %}
+{% else %}
+{% trans "This is the timeline for pythonica but pythonica hasn't posted anything yet." %}
+{% endifequal %}
+{% endfor %}
+
+</ul>
+</div>
+      <div class="pagination">
+       <dl>
+        <dt>{% trans 'Pagination' %}</dt>
+
+        <dd>
+         <ul class="nav">
+            {% if notices.has_previous %}
+            <li class="nav_prev"> 
+                <a href="{% url pythonica-profile page=notices.previous_page_number %}" rel="prev">{% trans 'After' %}</a> 
+            </li>
+            {% endif %}
+            {% if notices.has_next %}
+            <li class="nav_next"> 
+                <a href="{% url pythonica-profile page=notices.next_page_number %}" rel="next">{% trans 'Before' %}</a>
+            </li> 
+            {% endif %}
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+
+{% endblock content %}

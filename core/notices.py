@@ -20,7 +20,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 import re
 
 from django.conf import settings
-from django.views.generic.simple import direct_to_template
 
 
 _notice_regex_str = r'(#(?P<tag>%s))|(!(?P<group>%s))|(@(?P<username>%s))' % \
@@ -37,19 +36,3 @@ def get_tags_groups_users(notice_text):
         return map(lambda group: filter(bool, group), zip(*match)[1::2])
     else:
         return (tuple(), tuple(), tuple(),)
-
-
-def render_to(template):
-    """
-    @note: based on http://www.djangosnippets.org/snippets/821/
-    """
-    def renderer(func):
-        def wrapper(request, *args, **kw):
-            output = func(request, *args, **kw)
-            if isinstance(output, (list, tuple)):
-                return direct_to_template(request, output[1], output[0])
-            elif isinstance(output, dict):
-                return direct_to_template(request, template, output)
-            return output
-        return wrapper
-    return renderer

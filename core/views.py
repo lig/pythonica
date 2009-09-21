@@ -25,9 +25,10 @@ from django.db.models import Q
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 
+from decorators import login_proposed
 from forms import NoticeForm
 from models import Notice
-from utils import render_to
+from decorators import render_to
 
 
 @render_to('index.html')
@@ -70,16 +71,28 @@ def edit_profile(request):
     return {}
 
 
-@login_required
+@login_proposed
 @render_to('profile.html')
-def profile(request, username):
+def profile(request, username, is_logged_in, page=1):
     """
-    show user info
-    
-    @todo: make this view public via login_proposed decorator
+    show user info and user timeline
     """
     
-    return {}
+    try:
+        list_owner = User.objects.get(username=username)
+    except User.DoesNotExist:
+        raise Http404
+    
+    q_public = Q(is_restricted=False)
+    q_own = Q(author=list_owner)
+    
+    notices = Notice.objects.filter(q_own)
+    if not is_logged_in or request.user != list_owner:
+        notices = notices.filter(q_public)
+    
+    notices = Paginator(notices, 10)
+    
+    return {'list_owner': list_owner, 'notices': notices.page(page),}
 
 
 @login_required

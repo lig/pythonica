@@ -22,7 +22,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from managers import NoticeManager
-from utils import get_tags_groups_users
+from notices import get_tags_groups_users
 
 
 class Tag(models.Model):
