@@ -31,9 +31,11 @@ media_url = settings.MEDIA_URL.strip('/')
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^', include('core.urls')),
     
+    # admin must be first to avoid matching "admin" as username  
     (r'^admin/', include(admin.site.urls)),
+    
+    (r'^', include('core.urls')),    
     
     # django-registration http://pypi.python.org/pypi/django-registration
     (r'^accounts/', include('registration.urls')),
