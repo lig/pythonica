@@ -50,32 +50,44 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
        <h2>{% trans 'User actions' %}</h2>
        <ul>
 {% ifequal list_owner user %}
-        <li class="entity_edit">
-         <a href="http://identi.ca/settings/profile" title="Edit profile settings">Edit</a>
+<li class="entity_edit">
+    <a href="http://identi.ca/settings/profile" title="Edit profile settings">Edit</a>
 </li>
 {% else %}
-        <li class="entity_subscribe">
-         <form id="subscribe-{{ list_owner.id }}" class="form_user_subscribe" method="post" action="% url pythonica-subscribe %">
-          <fieldset>
-           <legend>{% trans 'Subscribe to this user' %}</legend>
-           subscribe_form
-           <input id="submit" name="submit" class="submit" value="{% trans 'Subscribe' %}" title="{% trans 'Subscribe to this user' %}" type="submit">
-</fieldset>
-<input value="1" name="ajax" type="hidden"></form>
-</li>
-        <li class="entity_block">
-         <form id="block-55119" class="form_user_block" method="post" action="http://identi.ca/main/block">
-          <fieldset>
-           <legend>Block this user</legend>
-           <input name="token" id="token" value="1788bd019d8834324a4e6e7cd2eac1d4e329134d477f0e70ab0618685a2347b19d485b1211c456e17312f32312058b3ddc4e70ac8233063d8ad435a4cf0540ce" type="hidden">
-           <input name="blockto" id="blockto-55119" value="55119" type="hidden">
-           <input name="returnto-action" id="returnto-action" value="showstream" type="hidden">
 
-           <input name="returnto-nickname" id="returnto-nickname" value="lig" type="hidden">
-           <input id="submit" name="submit" class="submit" value="Block" title="Block this user" type="submit">
-</fieldset>
-</form>
+<li class="entity_subscribe">
+{% if is_subscribed %}
+    <form id="unsubscribe-{{ list_owner.id }}" class="form_user_unsubscribe" method="post" action="{% url pythonica-subscribe %}">
+        <fieldset>
+            <legend>{% trans 'Unsubscribe from this user' %}</legend>
+            {{ subscribe_form }}
+            <input type="submit" id="submit" name="submit" class="submit" value="{% trans 'Unsubscribe' %}" title="{% trans 'Unsubscribe from this user' %}"/>
+        </fieldset>
+    </form>
+{% else %}
+    <form id="subscribe-{{ list_owner.id }}" class="form_user_subscribe" method="post" action="{% url pythonica-subscribe %}">
+        <fieldset>
+            <legend>{% trans 'Subscribe to this user' %}</legend>
+            {{ subscribe_form }}
+            <input  type="submit" id="submit" name="submit" class="submit" value="{% trans 'Subscribe' %}" title="{% trans 'Subscribe to this user' %}">
+        </fieldset>
+    </form>
 </li>
+{% endif %}
+
+<li class="entity_block">
+    <form id="block-55119" class="form_user_block" method="post" action="http://identi.ca/main/block">
+        <fieldset>
+            <legend>Block this user</legend>
+            <input name="token" id="token" value="1788bd019d8834324a4e6e7cd2eac1d4e329134d477f0e70ab0618685a2347b19d485b1211c456e17312f32312058b3ddc4e70ac8233063d8ad435a4cf0540ce" type="hidden">
+            <input name="blockto" id="blockto-55119" value="55119" type="hidden">
+            <input name="returnto-action" id="returnto-action" value="showstream" type="hidden">
+            <input name="returnto-nickname" id="returnto-nickname" value="lig" type="hidden">
+            <input id="submit" name="submit" class="submit" value="Block" title="Block this user" type="submit">
+        </fieldset>
+    </form>
+</li>
+
 {% endifequal %}
 </ul>
 </div>
@@ -118,12 +130,12 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
          <ul class="nav">
             {% if notices.has_previous %}
             <li class="nav_prev"> 
-                <a href="{% url pythonica-profile page=notices.previous_page_number %}" rel="prev">{% trans 'After' %}</a> 
+                <a href="{% url pythonica-profile username=list_owner.username page=notices.previous_page_number %}" rel="prev">{% trans 'After' %}</a> 
             </li>
             {% endif %}
             {% if notices.has_next %}
             <li class="nav_next"> 
-                <a href="{% url pythonica-profile page=notices.next_page_number %}" rel="next">{% trans 'Before' %}</a>
+                <a href="{% url pythonica-profile username=list_owner.username page=notices.next_page_number %}" rel="next">{% trans 'Before' %}</a>
             </li> 
             {% endif %}
 </ul>

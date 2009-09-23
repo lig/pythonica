@@ -25,13 +25,25 @@ from django.conf.urls.defaults import *
 patterns_prefix = '.'.join((os.path.basename(os.path.dirname(__file__)),
     'views',))
 
+
 urlpatterns = patterns(patterns_prefix,
+    
     (r'^$', 'index', {}, 'pythonica-index'),
     (r'^page/(?P<page>\d+)$', 'index', {}, 'pythonica-index'),
+    
     (r'^post/$', 'post', {}, 'pythonica-post'),
+    
     (r'^accounts/profile/$', 'edit_profile', {}, 'pythonica-profile-edit'),
+    
+    (r'^subscribe/$', 'subscribe', {}, 'pythonica-subscribe'),
+    
     (r'^(?P<username>%s)/$' % settings.USERNAME_REGEX, 'profile', {},
         'pythonica-profile'),
+    (r'^(?P<username>%s)/page/(?P<page>\d+)$' % settings.USERNAME_REGEX,
+        'profile', {}, 'pythonica-profile'),
+    
     (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
         'pythonica-all'),
+    (r'^(?P<username>%s)/all/page/(?P<page>\d+)$' % settings.USERNAME_REGEX,
+        'list_all', {}, 'pythonica-all'),
 )

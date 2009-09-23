@@ -20,15 +20,14 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 from django.db.models import Q
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
-from decorators import login_proposed
-from forms import NoticeForm
-from models import Notice
-from decorators import render_to
+from decorators import login_proposed, render_to, post_required
+from forms import NoticeForm, SubscribeForm
+from models import Notice, Follow
 
 
 @render_to('index.html')
@@ -92,7 +91,14 @@ def profile(request, username, is_logged_in, page=1):
     
     notices = Paginator(notices, 10)
     
-    return {'list_owner': list_owner, 'notices': notices.page(page),}
+    is_subscribed = is_logged_in and Follow.objects.filter(
+        follower=request.user, followed=list_owner).count()
+    
+    subscribeForm = SubscribeForm(
+        initial={'followed': list_owner.id, 'is_subscribed': is_subscribed})
+    
+    return {'list_owner': list_owner, 'notices': notices.page(page),
+        'is_subscribed': is_subscribed, 'subscribe_form': subscribeForm}
 
 
 @login_required
@@ -124,3 +130,39 @@ def list_all(request, username):
     
     return {'list_owner': list_owner, 'notices': notices,}
 
+
+@login_required
+@post_required
+def subscribe(request):
+    """
+    Subscribe or unsubscribe to/from user
+    """
+    
+    subscribeForm = SubscribeForm(request.POST)
+    
+    if subscribeForm.is_valid():
+        
+        followed_user = get_object_or_404(User, id=subscribeForm.cleaned_data['followed'])
+        
+        if subscribeForm.cleaned_data['is_subscribed']:
+            try:
+                Follow.objects.get(
+                    follower=request.user, followed=followed_user).delete()
+            except Follow.DoesNotExist:
+                pass
+            finally:
+                request.user.message_set.create(
+                    message=_('Unsubscribed from user %(username)s' %
+                        {'username': followed_user.username}))
+        else:
+            follow, created = Follow.objects.get_or_create(
+                follower=request.user, followed=followed_user)
+            if created:
+                request.user.message_set.create(
+                    message=_('Subscribed to user %(username)s' %
+                        {'username': followed_user.username}))
+        
+        return redirect('pythonica-profile', username=followed_user.username)
+        
+    else:
+        return HttpResponseBadRequest()

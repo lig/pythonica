@@ -19,6 +19,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 
 from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import redirect
 from django.views.generic.simple import direct_to_template
 
 
@@ -46,4 +47,17 @@ def login_proposed(function):
     def decorator(request, *args, **kwargs):
         kwargs['is_logged_in'] = request.user.is_authenticated()
         return function(request, *args, **kwargs)
+    return decorator
+
+
+def post_required(function):
+    """
+    Decorator for views that requires method "POST" and redirects to index page
+    otherwise
+    """
+    def decorator(request, *args, **kwargs):
+        if request.method == 'POST':
+            return function(request, *args, **kwargs)
+        else:
+            return redirect('pythonica-index')
     return decorator
