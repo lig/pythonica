@@ -1,5 +1,5 @@
           <span class="vcard author">
-          <a title="{{ user.get_full_name }} ({{ user.username }})" href="{{ user.get_absolute_url }}" class="url">
+          <a title="{{ user.get_full_name }} ({{ user.username }})" href="{{ user.info.get_absolute_url }}" class="url">
            <img src="http://avatar.identi.ca/7605-24-20090522012500.jpeg" width="24" height="24" class="avatar photo" alt="{% firstof user.get_full_name user.username %}"/>
            <span class="fn nickname">{{ user.username }}</span>
 </a>
