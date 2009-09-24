@@ -61,7 +61,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
         <fieldset>
             <legend>{% trans 'Unsubscribe from this user' %}</legend>
             {{ subscribe_form }}
-            <input type="submit" id="submit" name="submit" class="submit" value="{% trans 'Unsubscribe' %}" title="{% trans 'Unsubscribe from this user' %}"/>
+            <input type="submit" name="submit" class="submit" value="{% trans 'Unsubscribe' %}" title="{% trans 'Unsubscribe from this user' %}"/>
         </fieldset>
     </form>
 {% else %}
@@ -69,23 +69,30 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
         <fieldset>
             <legend>{% trans 'Subscribe to this user' %}</legend>
             {{ subscribe_form }}
-            <input  type="submit" id="submit" name="submit" class="submit" value="{% trans 'Subscribe' %}" title="{% trans 'Subscribe to this user' %}">
+            <input type="submit" name="submit" class="submit" value="{% trans 'Subscribe' %}" title="{% trans 'Subscribe to this user' %}">
         </fieldset>
     </form>
-</li>
 {% endif %}
+</li>
 
 <li class="entity_block">
-    <form id="block-55119" class="form_user_block" method="post" action="http://identi.ca/main/block">
+{% if is_blocked %}
+    <form id="unblock-{{ list_owner.id }}" class="form_user_unblock" method="post" action="{% url pythonica-block %}">
         <fieldset>
-            <legend>Block this user</legend>
-            <input name="token" id="token" value="1788bd019d8834324a4e6e7cd2eac1d4e329134d477f0e70ab0618685a2347b19d485b1211c456e17312f32312058b3ddc4e70ac8233063d8ad435a4cf0540ce" type="hidden">
-            <input name="blockto" id="blockto-55119" value="55119" type="hidden">
-            <input name="returnto-action" id="returnto-action" value="showstream" type="hidden">
-            <input name="returnto-nickname" id="returnto-nickname" value="lig" type="hidden">
-            <input id="submit" name="submit" class="submit" value="Block" title="Block this user" type="submit">
+            <legend>{% trans 'Unblock this user' %}</legend>
+            {{ block_form }}
+            <input type="submit" name="submit" class="submit" value="{% trans 'Unblock' %}" title="{% trans 'Unblock this user' %}">
         </fieldset>
     </form>
+{% else %}
+    <form id="block-{{ list_owner.id }}" class="form_user_block" method="post" action="{% url pythonica-block %}">
+        <fieldset>
+            <legend>{% trans 'Block this user' %}</legend>
+            {{ block_form }}
+            <input type="submit" name="submit" class="submit" value="{% trans 'Block' %}" title="{% trans 'Block this user' %}">
+        </fieldset>
+    </form>
+{% endif %}
 </li>
 
 {% endifequal %}

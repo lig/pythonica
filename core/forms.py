@@ -20,7 +20,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from models import Notice, Follow
+from models import Notice, Follow, Block
 
 
 class NoticeForm(forms.ModelForm):
@@ -49,3 +49,13 @@ class SubscribeForm(forms.ModelForm):
     class Meta:
         model = Follow
         fields = ('followed',)
+
+
+class BlockForm(forms.ModelForm):
+    
+    blocked = forms.IntegerField(widget=forms.HiddenInput)
+    is_blocked = forms.BooleanField(widget=forms.HiddenInput, required=False)
+    
+    class Meta:
+        model = Block
+        fields = ('blocked',)

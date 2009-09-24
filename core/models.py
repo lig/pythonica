@@ -194,6 +194,30 @@ class Follow(models.Model):
     followed = models.ForeignKey(User, related_name='followers',
         verbose_name=_('user that is followed'))
     
+    @classmethod
+    def is_subscribed(cls, follower, followed):
+        return bool(
+            cls.objects.filter(follower=follower, followed=followed).count())
+    
+    @classmethod
+    def subscribe(cls, follower, followed):
+        if Block.is_blocked(followed, follower):
+            return False
+        else:
+            follow, created = cls.objects.get_or_create(
+                follower=follower, followed=followed)
+            del follow
+            return created
+    
+    @classmethod
+    def unsubscribe(cls, follower, followed):
+        try:
+            cls.objects.get(follower=follower, followed=followed).delete()
+        except cls.DoesNotExist:
+            return False
+        finally:
+            return True
+    
     def __unicode__(self):
         return u'%s follows %s' % (self.follower, self.followed)
         
@@ -202,6 +226,51 @@ class Follow(models.Model):
         verbose_name = _('follow')
         verbose_name_plural = _('follows')
         ordering = ['follower', 'followed',]
+
+
+class Block(models.Model):
+    """
+    User blocking
+    @note: blocked user must be unsubscribed from blocker, will be unable to
+        subscribe to blocker in the future, and blocker will not be notified of
+        any @-replies from blocked user.
+    """
+    
+    blocker = models.ForeignKey(User, related_name='blockeds',
+        verbose_name=_('user that blocks'))
+    blocked = models.ForeignKey(User, related_name='blockers',
+        verbose_name=_('user that is blocked'))
+    
+    @classmethod
+    def is_blocked(cls, blocker, blocked):
+        return bool(
+            cls.objects.filter(blocker=blocker, blocked=blocked).count())
+    
+    @classmethod
+    def block(cls, blocker, blocked):
+        Follow.unsubscribe(blocker, blocked)
+        block, created = cls.objects.get_or_create(
+            blocker=blocker, blocked=blocked)
+        del block
+        return created
+    
+    @classmethod
+    def unblock(cls, blocker, blocked):
+        try:
+            cls.objects.get(blocker=blocker, blocked=blocked).delete()
+        except cls.DoesNotExist:
+            return False
+        finally:
+            return True
+    
+    def __unicode__(self):
+        return u'%s blocks %s' % (self.blocker, self.blocked)
+        
+    class Meta():
+        unique_together = ('blocker', 'blocked',)
+        verbose_name = _('block')
+        verbose_name_plural = _('blocks')
+        ordering = ['blocker', 'blocked',]
 
 
 class UserInfo(models.Model):

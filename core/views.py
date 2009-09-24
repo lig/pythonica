@@ -26,8 +26,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
 from decorators import login_proposed, render_to, post_required
-from forms import NoticeForm, SubscribeForm
-from models import Notice, Follow
+from forms import NoticeForm, SubscribeForm, BlockForm
+from models import Notice, Follow, Block
 
 
 @render_to('index.html')
@@ -91,14 +91,18 @@ def profile(request, username, is_logged_in, page=1):
     
     notices = Paginator(notices, 10)
     
-    is_subscribed = is_logged_in and Follow.objects.filter(
-        follower=request.user, followed=list_owner).count()
-    
+    is_subscribed = (is_logged_in and
+        Follow.is_subscribed(request.user, list_owner))
     subscribeForm = SubscribeForm(
         initial={'followed': list_owner.id, 'is_subscribed': is_subscribed})
     
+    is_blocked = is_logged_in and Block.is_blocked(request.user, list_owner)
+    blockForm = BlockForm(
+        initial={'blocked': list_owner.id, 'is_blocked': is_blocked})
+    
     return {'list_owner': list_owner, 'notices': notices.page(page),
-        'is_subscribed': is_subscribed, 'subscribe_form': subscribeForm}
+        'is_subscribed': is_subscribed, 'subscribe_form': subscribeForm,
+        'is_blocked': is_blocked, 'block_form': blockForm}
 
 
 @login_required
@@ -142,27 +146,52 @@ def subscribe(request):
     
     if subscribeForm.is_valid():
         
-        followed_user = get_object_or_404(User, id=subscribeForm.cleaned_data['followed'])
+        followed_user = get_object_or_404(User,
+            id=subscribeForm.cleaned_data['followed'])
         
         if subscribeForm.cleaned_data['is_subscribed']:
-            try:
-                Follow.objects.get(
-                    follower=request.user, followed=followed_user).delete()
-            except Follow.DoesNotExist:
-                pass
-            finally:
+            if Follow.unsubscribe(request.user, followed_user):
                 request.user.message_set.create(
                     message=_('Unsubscribed from user %(username)s' %
                         {'username': followed_user.username}))
         else:
-            follow, created = Follow.objects.get_or_create(
-                follower=request.user, followed=followed_user)
-            if created:
+            if Follow.subscribe(request.user, followed_user):
                 request.user.message_set.create(
                     message=_('Subscribed to user %(username)s' %
                         {'username': followed_user.username}))
         
         return redirect('pythonica-profile', username=followed_user.username)
+        
+    else:
+        return HttpResponseBadRequest()
+
+
+@login_required
+@post_required
+def block(request):
+    """
+    Block or unblock user
+    """
+    
+    blockForm = BlockForm(request.POST)
+    
+    if blockForm.is_valid():
+        
+        blocked_user = get_object_or_404(User,
+            id=blockForm.cleaned_data['blocked'])
+        
+        if blockForm.cleaned_data['is_blocked']:
+            if Block.unblock(request.user, blocked_user):
+                request.user.message_set.create(
+                    message=_('User %(username)s unblocked' %
+                        {'username': blocked_user.username}))
+        else:
+            if Block.block(request.user, blocked_user):
+                request.user.message_set.create(
+                    message=_('User %(username)s blocked' %
+                        {'username': blocked_user.username}))
+        
+        return redirect('pythonica-profile', username=blocked_user.username)
         
     else:
         return HttpResponseBadRequest()

@@ -36,6 +36,7 @@ urlpatterns = patterns(patterns_prefix,
     (r'^accounts/profile/$', 'edit_profile', {}, 'pythonica-profile-edit'),
     
     (r'^subscribe/$', 'subscribe', {}, 'pythonica-subscribe'),
+    (r'^block/$', 'block', {}, 'pythonica-block'),
     
     (r'^(?P<username>%s)/$' % settings.USERNAME_REGEX, 'profile', {},
         'pythonica-profile'),
