@@ -98,14 +98,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% endifequal %}
 </ul>
 </div>
-      <div id="notices_primary">
-       <h2>Notices</h2>
-       <ol class="notices xoxo"></ol>
-</div>
-      <div class="guide"><p>This is the timeline for pythonica but pythonica hasn't posted anything yet. Seen anything interesting recently? You haven't posted any notices yet, now would be a good time to start :)</p>
-
-</div>
-</div>
 
      <dl id="page_notice" class="system_notice">
       <dt>{% trans 'Page notice' %}</dt>
@@ -120,11 +112,13 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% for notice in notices.object_list %}
 {% include 'inc/notice.html' %}
 {% empty %}
+<div class="guide">
 {% ifequal list_owner user %}
-{% trans "Seen anything interesting recently? You haven't posted any notices yet, now would be a good time to start :)" %}
+<p>{% trans "Seen anything interesting recently? You haven't posted any notices yet, now would be a good time to start :)" %}</p>
 {% else %}
-{% trans "This is the timeline for pythonica but pythonica hasn't posted anything yet." %}
+<p>{% trans "This is the timeline for pythonica but pythonica hasn't posted anything yet." %}</p>
 {% endifequal %}
+</div>
 {% endfor %}
 
 </ul>
