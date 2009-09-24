@@ -113,6 +113,7 @@ def list_all(request, username):
     notices to groups user in
     and we must show restricted notices (notices to closed groups) to these
     groups members only
+    and no notices from blocked users must be shown
     
     @todo: make this view public via login_proposed decorator
     """
@@ -127,10 +128,11 @@ def list_all(request, username):
     q_followed = Q(author__followeds__follower=list_owner)
     q_replies = Q(in_reply_to__author=list_owner)
     q_from_groups = Q(groups__users=list_owner)
+    q_blocked = Q(author__blockeds__blocker=list_owner)
     
     notices = Notice.objects.filter(
         Q((q_own | q_followed | q_replies), q_public) |
-        q_from_groups)
+        q_from_groups).exclude(q_blocked)
     
     return {'list_owner': list_owner, 'notices': notices,}
 
