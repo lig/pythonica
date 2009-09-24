@@ -101,29 +101,9 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 </form>
 </div>
    <div id="core">
-    <dl id="site_nav_local_views">
-     <dt>{% trans 'Local views' %}</dt>
-     <dd>
 
-      <ul class="nav">
-       <li id="nav_timeline_public">
-        <a href="{% url pythonica-index %}" title="{% trans 'Public timeline' %}">{% trans 'Public' %}</a>
-</li>
-       <li id="nav_groups">
-        <a href="% url pythonica-groups %" title="{% trans 'User groups' %}">{% trans 'Groups' %}</a>
-</li>
-       <li id="nav_recent-tags">
-        <a href="% url pythonica-tags %" title="{% trans 'Recent tags' %}">{% trans 'Recent tags' %}</a>
-</li>
-       <li id="nav_featured">
-        <a href="% url pytonica-featured %" title="{% trans 'Featured users' %}">{% trans 'Featured' %}</a>
-</li>
-       <li id="nav_timeline_favorited">
-        <a href="% url pythonica-popular %" title="{% trans 'Popular notices' %}">{% trans 'Popular' %}</a>
-</li>
-</ul>
-</dd>
-</dl>
+{% block nav_local %}
+{% endblock nav_local %}
 
 <div id="content">
 {% block content %}
@@ -132,7 +112,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 <div id="aside_primary" class="aside">
 {% block side %}
-{% include 'inc/side.html' %}
 {% endblock side %}
 </div>
 

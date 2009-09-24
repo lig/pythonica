@@ -30,14 +30,14 @@ from forms import NoticeForm, SubscribeForm, BlockForm
 from models import Notice, Follow, Block
 
 
-@render_to('index.html')
+@render_to('main/index.html')
 def index(request, page=1):
     last_notices_pages = Paginator(Notice.objects.public(), 10)
     return {'last_notices': last_notices_pages.page(page)}
 
 
 @login_required
-@render_to('post.html')
+@render_to('profile/post.html')
 def post(request):
     
     if request.method == 'POST':
@@ -61,7 +61,7 @@ def post(request):
 
 
 @login_required
-@render_to('profile_form.html')
+@render_to('profile/profile_form.html')
 def edit_profile(request):
     """
     lest user edit her info
@@ -71,7 +71,7 @@ def edit_profile(request):
 
 
 @login_proposed
-@render_to('profile.html')
+@render_to('profile/profile.html')
 def profile(request, username, is_logged_in, page=1):
     """
     show user info and user timeline
@@ -106,7 +106,7 @@ def profile(request, username, is_logged_in, page=1):
 
 
 @login_required
-@render_to('all.html')
+@render_to('profile/all.html')
 def list_all(request, username):
     """
     we gonna show here: own notices, notices of the followed users, replies,

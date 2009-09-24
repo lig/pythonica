@@ -1,4 +1,4 @@
-{% extends 'laconica/base.html' %}
+{% extends 'laconica/profile/base.html' %}{% load i18n %}
 {% comment %}
 Copyright 2009 Serge Matveenko
 
@@ -19,9 +19,5 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
 
 {% block pythonica %}
-
-{% for notice in notices %}
-{% include 'inc/notice.html' %}
-{% endfor %}
-
+<div class="error">{{ notice_form.errors }}</div>
 {% endblock pythonica %}
