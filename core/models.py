@@ -236,9 +236,9 @@ class Block(models.Model):
         any @-replies from blocked user.
     """
     
-    blocker = models.ForeignKey(User, related_name='blockeds',
+    blocker = models.ForeignKey(User, related_name='is_blocker',
         verbose_name=_('user that blocks'))
-    blocked = models.ForeignKey(User, related_name='blockers',
+    blocked = models.ForeignKey(User, related_name='is_blocked',
         verbose_name=_('user that is blocked'))
     
     @classmethod

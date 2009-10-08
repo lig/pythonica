@@ -128,11 +128,12 @@ def list_all(request, username):
     q_followed = Q(author__followeds__follower=list_owner)
     q_replies = Q(in_reply_to__author=list_owner)
     q_from_groups = Q(groups__users=list_owner)
-    q_blocked = Q(author__blockeds__blocker=list_owner)
+    q_blocked = Q(author__is_blocked__blocker=list_owner)
     
-    notices = Notice.objects.filter(
-        Q((q_own | q_followed | q_replies), q_public) |
-        q_from_groups).exclude(q_blocked)
+    """ ((own or followed or replies) and public) or from_groups
+    exclude blocked do not repeat one twice"""
+    notices = Notice.objects.filter(Q((q_own | q_followed | q_replies),
+        q_public) | q_from_groups).exclude(q_blocked).distinct()
     
     return {'list_owner': list_owner, 'notices': notices,}
 
