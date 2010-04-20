@@ -60,16 +60,6 @@ def post(request):
     return {'error_notice_form': noticeForm,}
 
 
-@login_required
-@render_to('profile/profile_form.html')
-def edit_profile(request):
-    """
-    lest user edit her info
-    """
-    
-    return {}
-
-
 @login_proposed
 @render_to('profile/profile.html')
 def profile(request, username, is_logged_in, page=1):
