@@ -20,7 +20,7 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
-from django.http import Http404, HttpResponseBadRequest
+from django.http import HttpResponseBadRequest
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
@@ -77,10 +77,7 @@ def profile(request, username, is_logged_in, page=1):
     show user info and user timeline
     """
     
-    try:
-        list_owner = User.objects.get(username=username)
-    except User.DoesNotExist:
-        raise Http404
+    list_owner = get_object_or_404(User, username=username)
     
     q_public = Q(is_restricted=False)
     q_own = Q(author=list_owner)
@@ -118,10 +115,7 @@ def list_all(request, username):
     @todo: make this view public via login_proposed decorator
     """
     
-    try:
-        list_owner = User.objects.get(username=username)
-    except User.DoesNotExist:
-        raise Http404
+    list_owner = get_object_or_404(User, username=username)
     
     q_public = Q(is_restricted=False)
     q_own = Q(author=list_owner)
