@@ -1,5 +1,5 @@
 """
-Copyright 2009 Serge Matveenko
+Copyright 2009-2010 Serge Matveenko
 
 This file is part of Pythonica.
 
@@ -30,14 +30,14 @@ from forms import NoticeForm, SubscribeForm, BlockForm
 from models import Notice, Follow, Block
 
 
-@render_to('main/index.html')
+@render_to()
 def index(request, page=1):
     last_notices_pages = Paginator(Notice.objects.public(), 10)
     return {'last_notices': last_notices_pages.page(page)}
 
 
 @login_required
-@render_to('profile/post.html')
+@render_to()
 def post(request):
     
     if request.method == 'POST':
@@ -61,7 +61,7 @@ def post(request):
 
 
 @login_proposed
-@render_to('profile/profile.html')
+@render_to()
 def profile(request, username, is_logged_in, page=1):
     """
     show user info and user timeline
@@ -93,7 +93,7 @@ def profile(request, username, is_logged_in, page=1):
 
 
 @login_required
-@render_to('profile/all.html')
+@render_to()
 def list_all(request, username):
     """
     we gonna show here: own notices, notices of the followed users, replies,
@@ -102,6 +102,7 @@ def list_all(request, username):
     groups members only
     and no notices from blocked users must be shown
     
+    @todo: completely rewrite logic. it doesn't work now at all.
     @todo: make this view public via login_proposed decorator
     """
     

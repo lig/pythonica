@@ -1,6 +1,6 @@
-{% extends 'base_default.html' %}
+{% extends 'base.html' %}
 {% comment %}
-Copyright 2009 Serge Matveenko
+Copyright 2009-2010 Serge Matveenko
 
 This file is part of Pythonica.
 
@@ -18,15 +18,10 @@ You should have received a copy of the GNU Affero General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 {% endcomment %}
 
-{% block content %}
-
-{% block notice_form %}
-{% include 'inc/notice_form.html' %}
-{% endblock notice_form %}
-
 {% block pythonica %}
+
+{% for notice in last_notices.object_list %}
+{% include 'inc/notice.html' %}
+{% endfor %}
+
 {% endblock pythonica %}
-
-<p><em>Powered by <a href="http://pythonica.nophp.ru/">Pythonica</a></em></p>
-
-{% endblock content %}

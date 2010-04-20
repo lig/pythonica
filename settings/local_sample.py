@@ -1,5 +1,5 @@
 """
-Copyright 2009 Serge Matveenko
+Copyright 2009-2010 Serge Matveenko
 
 This file is part of Pythonica.
 
@@ -60,7 +60,7 @@ if DEBUG == True:
         'django_evolution',
     )
 
-PYTHONICA_THEME = 'laconica'
+PYTHONICA_THEME = 'pythonica'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

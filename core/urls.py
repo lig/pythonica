@@ -1,5 +1,5 @@
 """
-Copyright 2009 Serge Matveenko
+Copyright 2009-2010 Serge Matveenko
 
 This file is part of Pythonica.
 
@@ -32,8 +32,6 @@ urlpatterns = patterns(patterns_prefix,
     (r'^page/(?P<page>\d+)$', 'index', {}, 'pythonica-index'),
     
     (r'^post/$', 'post', {}, 'pythonica-post'),
-    
-    (r'^accounts/profile/$', 'edit_profile', {}, 'pythonica-profile-edit'),
     
     (r'^subscribe/$', 'subscribe', {}, 'pythonica-subscribe'),
     (r'^block/$', 'block', {}, 'pythonica-block'),
