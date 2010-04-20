@@ -1,5 +1,5 @@
 """
-Copyright 2009 Serge Matveenko
+Copyright 2009-2010 Serge Matveenko
 
 This file is part of Pythonica.
 
@@ -17,23 +17,38 @@ You should have received a copy of the GNU Affero General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import os
 
-from django.contrib.auth.decorators import user_passes_test
-from django.shortcuts import redirect
-from django.views.generic.simple import direct_to_template
+from django.shortcuts import render_to_response, redirect
+from django.template import RequestContext
 
 
-def render_to(template):
+def render_to(template=None):
     """
-    @note: based on http://www.djangosnippets.org/snippets/821/
+    Decorator for Django views that sends returned dict to render_to_response
+    function with given template and RequestContext as context instance.
+
+    If view doesn't return dict then decorator simply returns output.
+    Additionally view can return two-tuple, which must contain dict as first
+    element and string with template name as second. This string will
+    override template name, given as parameter
+
+    Parameters:
+
+     - template: template name to use
     """
     def renderer(func):
-        def wrapper(request, *args, **kw):
-            output = func(request, *args, **kw)
+        def wrapper(request, *args, **kwargs):
+            output = func(request, *args, **kwargs)
             if isinstance(output, (list, tuple)):
-                return direct_to_template(request, output[1], output[0])
+                return render_to_response(output[1], output[0],
+                    RequestContext(request))
             elif isinstance(output, dict):
-                return direct_to_template(request, template, output)
+                return render_to_response(
+                    template or os.path.normpath(os.path.join(
+                        func.__module__.replace('.', '/'),
+                        os.pardir, '%s.html' % func.__name__)),
+                    output, RequestContext(request))
             return output
         return wrapper
     return renderer
