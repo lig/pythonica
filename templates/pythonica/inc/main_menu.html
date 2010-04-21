@@ -1,0 +1,8 @@
+{% load i18n %}<div class="menu">
+{% if user.is_authenticated %}
+    <a href="{% url auth_logout %}">{% trans 'Logout' %}</a>
+{% else %}
+    <a href="{% url registration_register %}">{% trans 'Register' %}</a>
+    <a href="{% url auth_login %}">{% trans 'Login' %}</a>
+{% endif %}
+</div>
