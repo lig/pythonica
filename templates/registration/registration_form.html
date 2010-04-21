@@ -1,0 +1,42 @@
+{% extends "base.html" %}{% load i18n %}
+{% comment %}
+Copyright 2010 Serge Matveenko
+
+This file is part of Pythonica.
+
+Pythonica is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Pythonica is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
+{% endcomment %}
+
+
+{% block content %}
+
+<form action="" method="post">
+
+<p>{{ form.username.label_tag }}<br />
+{{ form.username }} <span class="error">{{ form.username.errors }}</span></p>
+
+<p>{{ form.email.label_tag }}<br />
+{{ form.email }} <span class="error">{{ form.email.errors }}</span></p>
+
+<p>{{ form.password1.label_tag }}<br />
+{{ form.password1 }} <span class="error">{{ form.password1.errors }}</span></p>
+
+<p>{{ form.password2.label_tag }}<br />
+{{ form.password2 }} <span class="error">{{ form.password2.errors }}</span></p>
+
+<p><input type="submit" value="{% trans 'Register account' %}" /></p>
+
+</form>
+
+{% endblock %}
