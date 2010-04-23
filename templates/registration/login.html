@@ -40,4 +40,6 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
+<p><a href="{% url auth_password_reset %}">{% trans 'Recover password' %}</a></p>
+
 {% endblock content %}
