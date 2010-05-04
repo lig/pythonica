@@ -24,6 +24,9 @@ from models import Notice
 
 
 def pythonica_context(request):
+    """
+    @todo: convert it into inclusion tag
+    """
     
     noticeForm = NoticeForm()
     
