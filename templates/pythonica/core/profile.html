@@ -20,6 +20,10 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 {% block pythonica %}
 
-<p>@todo: user profile view and modification</p>
+{% ifequal request.user list_owner %}
+@todo user profile modification
+{% else %}
+@todo: user profile view
+{% endifequal %}
 
 {% endblock pythonica %}

@@ -38,11 +38,9 @@ urlpatterns = patterns(patterns_prefix,
     
     (r'^(?P<username>%s)/$' % settings.USERNAME_REGEX, 'profile', {},
         'pythonica-profile'),
-    (r'^(?P<username>%s)/page/(?P<page>\d+)$' % settings.USERNAME_REGEX,
-        'profile', {}, 'pythonica-profile'),
+    (r'^(?P<username>%s)/edit/$' % settings.USERNAME_REGEX, 'profile_edit', {},
+        'pythonica-profile-edit'),
     
     (r'^(?P<username>%s)/all/$' % settings.USERNAME_REGEX, 'list_all', {},
         'pythonica-all'),
-    (r'^(?P<username>%s)/all/page/(?P<page>\d+)$' % settings.USERNAME_REGEX,
-        'list_all', {}, 'pythonica-all'),
 )

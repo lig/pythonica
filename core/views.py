@@ -31,9 +31,10 @@ from models import Notice, Follow, Block
 
 
 @render_to()
-def index(request, page=1):
+def index(request):
     last_notices_pages = Paginator(Notice.objects.public(), 10)
-    return {'last_notices': last_notices_pages.page(page)}
+    return {'last_notices':
+        last_notices_pages.page(request.GET.get('page', 1))}
 
 
 @login_required
@@ -62,7 +63,7 @@ def post(request):
 
 @login_proposed
 @render_to()
-def profile(request, username, is_logged_in, page=1):
+def profile(request, username, is_logged_in):
     """
     show user info and user timeline
     """
@@ -87,9 +88,16 @@ def profile(request, username, is_logged_in, page=1):
     blockForm = BlockForm(
         initial={'blocked': list_owner.id, 'is_blocked': is_blocked})
     
-    return {'list_owner': list_owner, 'notices': notices.page(page),
+    return {'list_owner': list_owner,
+        'notices': notices.page(request.GET.get('page', 1)),
         'is_subscribed': is_subscribed, 'subscribe_form': subscribeForm,
         'is_blocked': is_blocked, 'block_form': blockForm}
+
+
+@login_required
+@render_to()
+def profile_edit(request, username):
+    pass
 
 
 @login_required
