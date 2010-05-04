@@ -73,6 +73,9 @@ def profile(request, username, is_logged_in):
     q_public = Q(is_restricted=False)
     q_own = Q(author=list_owner)
     
+    """
+    @todo: show restricted notices that viewer has permissions to view
+    """
     notices = Notice.objects.filter(q_own)
     if not is_logged_in or request.user != list_owner:
         notices = notices.filter(q_public)
