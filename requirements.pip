@@ -1,6 +1,7 @@
 Django
 distribute
-django-evolution
 django-extensions
 django-registration
+mongoengine
+pymongo
 wsgiref
