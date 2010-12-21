@@ -85,7 +85,7 @@ class Notice(Document):
     text = StringField(max_length=140, required=True)
     via = ReferenceField(Device, required=True)
     in_reply_to = ListField(ReferenceField('Notice'))
-    tags = ListField(ReferenceField(StringField))
+    tags = ListField(StringField())
     groups = ListField(ReferenceField(Group))
     is_restricted = BooleanField(default=False)
     
