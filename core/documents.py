@@ -23,29 +23,9 @@ from django.db.models import permalink
 
 from notices import get_tags_groups_users
 
-from mongoengine import (Document, StringField, IntField, ListField,
-    ReferenceField, BooleanField, URLField, DateTimeField, queryset_manager)
+from mongoengine import (Document, StringField, ListField, ReferenceField,
+    BooleanField, URLField, DateTimeField, queryset_manager)
 from mongoengine.django.auth import User
-
-
-class Tag(Document):
-    """
-    @note: tags for notices, groups, users  
-    """
-    
-    meta = {
-        'ordering': ('-use_count',),
-    }
-    
-    name = StringField(max_length=140, primary_key=True)
-    use_count = IntField(default=0)
-    
-    def __unicode__(self):
-        return u'%s (%s)' % (self.name, self.use_count)
-    
-    @permalink
-    def get_absolute_url(self):
-        return ('tag', [self.name,])
 
 
 class Group(Document):
@@ -58,12 +38,10 @@ class Group(Document):
     }
     
     name = StringField(max_length=140, primary_key=True)
-    tags = ListField(ReferenceField(Tag))
+    tags = ListField(StringField())
     users = ListField(ReferenceField(User))
     is_closed = BooleanField(default=False)
     owner = ReferenceField(User, required=True)
-    users_count = IntField(default=0)
-    notices_count = IntField(default=0)
     
     def __unicode__(self):
         return u'%s' % self.name
@@ -84,7 +62,6 @@ class Device(Document):
     
     name = StringField(max_length=140, required=True)
     url = URLField()
-    notices_count = IntField(default=0)
     
     def __unicode__(self):
         return u'%s' % self.name
@@ -97,7 +74,6 @@ class Notice(Document):
     """
     @note: Notice itself
     @todo: Make templatetag for notice text formating
-    @todo: Automate notice favorites count
     """
     
     meta = {
@@ -109,10 +85,9 @@ class Notice(Document):
     text = StringField(max_length=140, required=True)
     via = ReferenceField(Device, required=True)
     in_reply_to = ListField(ReferenceField('Notice'))
-    tags = ListField(ReferenceField(Tag))
+    tags = ListField(ReferenceField(StringField))
     groups = ListField(ReferenceField(Group))
     is_restricted = BooleanField(default=False)
-    favorited_count = IntField(default=0)
     
     def save(self, *args, **kwargs):
         """ posted time generation """
@@ -122,10 +97,7 @@ class Notice(Document):
         tags, groups, users = get_tags_groups_users(self.text)
         
         """ process tags """
-        for tag in tags:
-            Tag.objects.update_one(safe_update=True, upsert=True, name=tag,
-                set__use_count__inc=1)
-        self.tags = list(Tag.objects(name__in=tags))
+        self.tags = tags
         
         """ process groups """
         self.groups = list(Group.objects(name__in=groups))
