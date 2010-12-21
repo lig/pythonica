@@ -143,8 +143,7 @@ class Follow(Document):
     
     @classmethod
     def is_subscribed(cls, follower, followed):
-        return bool(
-            cls.objects.filter(follower=follower, followed=followed).count())
+        return bool(cls.objects(follower=follower, followed=followed).first())
     
     @classmethod
     def subscribe(cls, follower, followed):
@@ -158,12 +157,8 @@ class Follow(Document):
     
     @classmethod
     def unsubscribe(cls, follower, followed):
-        try:
-            cls.objects.get(follower=follower, followed=followed).delete()
-        except cls.DoesNotExist:
-            return False
-        finally:
-            return True
+        return cls.objects.filter(follower=follower, followed=followed).delete(
+            safe=True)
     
     def __unicode__(self):
         return u'%s follows %s' % (self.follower, self.followed)
@@ -176,7 +171,6 @@ class Block(Document):
         subscribe to blocker in the future, and blocker will not be notified of
         any @-replies from blocked user.
     """
-    """ @todo: migrate classmethods """
     
     meta = {
         'unique_together': ('blocker', 'blocked',),
@@ -188,8 +182,7 @@ class Block(Document):
     
     @classmethod
     def is_blocked(cls, blocker, blocked):
-        return bool(
-            cls.objects.filter(blocker=blocker, blocked=blocked).count())
+        return bool(cls.objects(blocker=blocker, blocked=blocked).first())
     
     @classmethod
     def block(cls, blocker, blocked):
@@ -201,12 +194,8 @@ class Block(Document):
     
     @classmethod
     def unblock(cls, blocker, blocked):
-        try:
-            cls.objects.get(blocker=blocker, blocked=blocked).delete()
-        except cls.DoesNotExist:
-            return False
-        finally:
-            return True
+        return cls.objects.filter(blocker=blocker, blocked=blocked).delete(
+            safe=True)
     
     def __unicode__(self):
         return u'%s blocks %s' % (self.blocker, self.blocked)
