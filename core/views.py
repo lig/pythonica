@@ -18,21 +18,21 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.http import HttpResponseBadRequest
-from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
+from mongoengine import Q
+from mongoengine.django.auth import User
 
 from decorators import login_proposed, render_to, post_required
+from documents import Notice, Follow, Block
 from forms import NoticeForm, SubscribeForm, BlockForm
-from models import Notice, Follow, Block
 
 
 @render_to()
 def index(request):
-    last_notices_pages = Paginator(Notice.objects.public(), 10)
+    last_notices_pages = Paginator(Notice.public(), 10)
     return {'last_notices':
         last_notices_pages.page(request.GET.get('page', 1))}
 

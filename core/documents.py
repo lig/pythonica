@@ -216,7 +216,7 @@ class UserInfo(User):
     favorites = ListField(ReferenceField(Notice))
     
     def __unicode__(self):
-        return u'%s' % self.user
+        return super(UserInfo, self).__unicode__()
     
     @permalink
     def get_absolute_url(self):

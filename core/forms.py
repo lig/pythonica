@@ -20,10 +20,12 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from models import Notice, Follow, Block
+from documents import Notice, Follow, Block
+
+""" @todo: rewrite forms """
 
 
-class NoticeForm(forms.ModelForm):
+class NoticeForm(forms.Form):
     
     text = forms.CharField(label=_('Whazup?'), widget=forms.Textarea)
     in_reply_to = forms.IntegerField(widget=forms.HiddenInput, required=False)
@@ -40,7 +42,7 @@ class NoticeForm(forms.ModelForm):
         fields = ('text',)
 
 
-class SubscribeForm(forms.ModelForm):
+class SubscribeForm(forms.Form):
     
     followed = forms.IntegerField(widget=forms.HiddenInput)
     is_subscribed = forms.BooleanField(widget=forms.HiddenInput,
@@ -51,7 +53,7 @@ class SubscribeForm(forms.ModelForm):
         fields = ('followed',)
 
 
-class BlockForm(forms.ModelForm):
+class BlockForm(forms.Form):
     
     blocked = forms.IntegerField(widget=forms.HiddenInput)
     is_blocked = forms.BooleanField(widget=forms.HiddenInput, required=False)

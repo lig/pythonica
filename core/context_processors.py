@@ -17,23 +17,17 @@ You should have received a copy of the GNU Affero General Public License
 along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from django.contrib.sites.models import Site
-
 from forms import NoticeForm
-from models import Notice
 
 
 def pythonica_context(request):
     """
-    @todo: convert it into inclusion tag
+    @todo: convert notice form into inclusion tag
+    @todo: popular notices
     """
     
     noticeForm = NoticeForm()
     
-    popular_notices = Notice.objects.public().order_by('-favorited_count')
-    
     return {
-        'site': Site.objects.get_current(),
         'notice_form': noticeForm,
-        'popular_notices': popular_notices,
     }
