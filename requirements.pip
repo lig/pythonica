@@ -1,6 +1,7 @@
 Django
 distribute
 django-extensions
+django-registration-me
 -e git://github.com/lig/mongoengine.git#egg=mongoengine
 pymongo
 wsgiref
