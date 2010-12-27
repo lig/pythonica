@@ -19,12 +19,13 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.http import HttpResponseBadRequest
-from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponseBadRequest, Http404
+from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from mongoengine import Q
 from mongoengine.django.auth import User
 
+from . import default_device
 from decorators import login_proposed, render_to, post_required
 from documents import Notice, Follow, Block
 from forms import NoticeForm, SubscribeForm, BlockForm
@@ -48,12 +49,11 @@ def post(request):
             notice = noticeForm.save(commit=False)
             notice.author = request.user
             """ 1 for web """
-            notice.via_id = 1
+            notice.via = default_device
             notice.save()
             if noticeForm.cleaned_data['in_reply_to']:
                 notice.in_reply_to = noticeForm.cleaned_data['in_reply_to'],
-            request.user.message_set.create(message=_('Your notice added'))
-            return redirect('pythonica-all', username=notice.author)
+            return redirect('pythonica-all', username=notice.author.username)
     
     else:
         return redirect('pythonica-index')
@@ -68,7 +68,9 @@ def profile(request, username, is_logged_in):
     show user info and user timeline
     """
     
-    list_owner = get_object_or_404(User, username=username)
+    list_owner = User.objects(username=username).first()
+    if not list_owner:
+        raise Http404
     
     q_public = Q(is_restricted=False)
     q_own = Q(author=list_owner)
@@ -117,19 +119,16 @@ def list_all(request, username):
     @todo: make this view public via login_proposed decorator
     """
     
-    list_owner = get_object_or_404(User, username=username)
+    list_owner = User.objects(username=username).first()
+    if not list_owner:
+        raise Http404
     
-    q_public = Q(is_restricted=False)
     q_own = Q(author=list_owner)
-    q_followed = Q(author__followeds__follower=list_owner)
-    q_replies = Q(in_reply_to__author=list_owner)
-    q_from_groups = Q(groups__users=list_owner)
-    q_blocked = Q(author__is_blocked__blocker=list_owner)
+    follows = map(lambda follow: follow.followed,
+        Follow.objects(follower=list_owner))
+    q_follow = Q(author__in=follows)
     
-    """ ((own or followed or replies) and public) or from_groups
-    exclude blocked do not repeat one twice"""
-    notices = Notice.objects.filter(Q((q_own | q_followed | q_replies),
-        q_public) | q_from_groups).exclude(q_blocked).distinct()
+    notices = Notice.objects(q_own | q_follow)
     
     return {'list_owner': list_owner, 'notices': notices,}
 

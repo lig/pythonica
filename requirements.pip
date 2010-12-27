@@ -1,6 +1,7 @@
 Django
 distribute
 django-extensions
+-e git://github.com/stephrdev/django-mongoforms.git#egg=django_mongoforms
 django-registration-me
 -e git://github.com/lig/mongoengine.git#egg=mongoengine
 pymongo

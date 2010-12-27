@@ -19,13 +19,14 @@ along with Pythonica.  If not, see <http://www.gnu.org/licenses/>.
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from mongoforms import MongoForm
 
 from documents import Notice, Follow, Block
 
 """ @todo: rewrite forms """
 
 
-class NoticeForm(forms.Form):
+class NoticeForm(MongoForm):
     
     text = forms.CharField(label=_('Whazup?'), widget=forms.Textarea)
     in_reply_to = forms.IntegerField(widget=forms.HiddenInput, required=False)
@@ -38,7 +39,7 @@ class NoticeForm(forms.Form):
         return text
     
     class Meta:
-        model = Notice
+        document = Notice
         fields = ('text',)
 
 

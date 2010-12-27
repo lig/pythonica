@@ -24,7 +24,8 @@ from django.db.models import permalink
 from notices import get_tags_groups_users
 
 from mongoengine import (Document, StringField, ListField, ReferenceField,
-    BooleanField, URLField, DateTimeField, queryset_manager)
+    GenericReferenceField, BooleanField, URLField, DateTimeField,
+    queryset_manager)
 from mongoengine.django.auth import User
 
 
@@ -81,7 +82,7 @@ class Notice(Document):
     }
     
     posted = DateTimeField()
-    author = ReferenceField('UserInfo', required=True)
+    author = GenericReferenceField('UserInfo', required=True)
     text = StringField(max_length=140, required=True)
     via = ReferenceField(Device, required=True)
     in_reply_to = ListField(ReferenceField('Notice'))
