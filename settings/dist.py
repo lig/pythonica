@@ -129,7 +129,3 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SESSION_ENGINE = 'mongoengine.django.sessions'
-
-SITE = {'domain': 'localhost:8000', 'name': 'localhost'}
-
-DEFAULT_FROM_EMAIL = 'devnull@%s' % SITE['domain'].split(':', 1)[0]

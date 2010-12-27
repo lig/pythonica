@@ -61,3 +61,7 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates', PYTHONICA_THEME),
     os.path.join(PROJECT_ROOT, 'templates'),
 )
+
+SITE = {'domain': 'localhost:8000', 'name': 'localhost'}
+
+DEFAULT_FROM_EMAIL = 'devnull@%s' % SITE['domain'].split(':', 1)[0]
